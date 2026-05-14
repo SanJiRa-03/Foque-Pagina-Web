@@ -715,26 +715,39 @@ body.modal-open {
 
     /* Ajuste del comportamiento del panel deslizante en móvil */
     .sliding-panel {
-        justify-content: flex-end; /* Los empuja al fondo (abajo) de la pantalla */
-        padding: 0;                 /* Sin márgenes, ocupan el 100% de la anchura total */
+        position: fixed;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        /* Usamos dvh (Dynamic VH) para que responda dinámicamente a la presencia de la barra de iOS */
+        height: 100dvh; 
+        background-color: #e3e3e3;
+        z-index: 15;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; /* Clava los botones abajo del todo de la zona útil */
+        padding: 0;
     }
 
     .panel-content {
-        flex-direction: row;        /* ¡Vuelven a estar en fila horizontal como en PC! */
+        flex-direction: row;        /* Vuelven a estar en fila horizontal como en PC */
         height: 120px;              /* Altura idéntica y compacta */
         width: 100%;
-        gap: 0;                     
+        gap: 0; 
+        /* Añadimos un minúsculo margen de seguridad nativo por si la barra está escondida del todo */
+        padding-bottom: env(safe-area-inset-bottom);
+        background-color: #ffffff;  /* Evita que se vea transparencia rara detrás del área de iOS */
     }
 
     .btn {
-        flex: 1;                    /* Se reparten el ancho al 50% cada uno equitativamente */
-        font-size: 1.8rem;          /* Tamaño de letra adaptado para que quepa bien en horizontal */
+        flex: 1;                    /* Se reparten el ancho al 50% cada uno */
+        font-size: 1.8rem;          /* Tamaño de letra adaptado */
         height: 100%;               
         padding-left: 0;
         justify-content: center;    /* Texto centrado en su bloque */
-        border-radius: 0;           /* Totalmente cuadrados sin bordes redondeados */
+        border-radius: 0;           /* Totalmente cuadrados */
         box-shadow: none;        
-        outline-offset: -12px;      /* Subrayado interior original */
+        outline-offset: -12px;      
     }
 
     /* Ajuste de reseñas */
