@@ -748,7 +748,7 @@ body.modal-open {
         bottom: auto !important; 
         
         /* La anclamos directamente al techo, justo debajo del header móvil */
-        top: 90px; /* Si tu header mide más en algún iPhone, puedes probar con 100px o 110px */
+        top: 77px; /* Si tu header mide más en algún iPhone, puedes probar con 100px o 110px */
         
         /* Invertimos el diseño para que apunte hacia abajo de forma limpia */
         border-radius: 0 0 20px 20px; 
