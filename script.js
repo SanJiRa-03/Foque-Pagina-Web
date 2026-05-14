@@ -16,11 +16,20 @@ const historyImages = document.querySelectorAll('.history-img');
 let currentIndex = 0;
 let historyIndex = 0;
 
-// 1. Panel Desplegable (Solo si existe en la página actual)
+// Variable de control para evitar que el scroll cierre el panel mientras se interactúa en móvil
+let isInteracting = false;
+
+// 1. Panel Desplegable optimizado para pantallas táctiles y PC
 if (toggleTab && slidingPanel) {
-    toggleTab.addEventListener('click', () => {
+    // Usamos 'pointerdown' que unifica el clic de ratón y el toque táctil al instante
+    toggleTab.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        isInteracting = true;
         slidingPanel.classList.toggle('active');
         toggleTab.classList.toggle('active');
+        
+        // Liberamos el control tras la transición
+        setTimeout(() => { isInteracting = false; }, 400);
     });
 }
 
@@ -28,6 +37,9 @@ if (toggleTab && slidingPanel) {
 const heroSection = document.querySelector('.hero');
 if (heroSection && toggleTab && slidingPanel) {
     window.addEventListener('scroll', () => {
+        // Si el usuario está tocando el botón en móvil, ignoramos temporalmente este chequeo
+        if (isInteracting) return; 
+
         const scrollY = window.scrollY;
         const heroHeight = heroSection.offsetHeight;
         
@@ -99,12 +111,12 @@ function cerrarCarta() {
     document.body.classList.remove('modal-open'); // Devuelve el scroll a la página
 }
 
-// Eventos para abrir la carta (Navbar y Panel)
-if (openCartaNav) openCartaNav.addEventListener('click', abrirCarta);
-if (openCartaPanel) openCartaPanel.addEventListener('click', abrirCarta);
+// Eventos para abrir la carta con soporte inmediato para móviles ('pointerdown')
+if (openCartaNav) openCartaNav.addEventListener('pointerdown', abrirCarta);
+if (openCartaPanel) openCartaPanel.addEventListener('pointerdown', abrirCarta);
 
 // Evento para cerrar la carta
-if (closeCarta) closeCarta.addEventListener('click', cerrarCarta);
+if (closeCarta) closeCarta.addEventListener('pointerdown', cerrarCarta);
 
 // 6. Evitar atajos de teclado comunes (Protección de código/imágenes)
 document.onkeydown = function(e) {
