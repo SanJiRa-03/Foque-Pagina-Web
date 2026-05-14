@@ -168,7 +168,7 @@ body.modal-open {
     z-index: 15;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Empuja los botones abajo del todo */
     transition: 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
@@ -713,18 +713,28 @@ body.modal-open {
         width: 80%; 
     }
 
-    /* Ajuste de botones del panel deslizante */
+    /* Ajuste del comportamiento del panel deslizante en móvil */
+    .sliding-panel {
+        justify-content: flex-end; /* Los empuja al fondo (abajo) de la pantalla */
+        padding: 0;                 /* Sin márgenes, ocupan el 100% de la anchura total */
+    }
+
     .panel-content {
-        flex-direction: column; 
-        height: auto;
+        flex-direction: row;        /* ¡Vuelven a estar en fila horizontal como en PC! */
+        height: 120px;              /* Altura idéntica y compacta */
+        width: 100%;
+        gap: 0;                     
     }
 
     .btn {
-        font-size: 2rem;
-        height: 80px; 
+        flex: 1;                    /* Se reparten el ancho al 50% cada uno equitativamente */
+        font-size: 1.8rem;          /* Tamaño de letra adaptado para que quepa bien en horizontal */
+        height: 100%;               
         padding-left: 0;
-        justify-content: center; /* Centramos texto del botón */
-        outline-offset: -8px;
+        justify-content: center;    /* Texto centrado en su bloque */
+        border-radius: 0;           /* Totalmente cuadrados sin bordes redondeados */
+        box-shadow: none;        
+        outline-offset: -12px;      /* Subrayado interior original */
     }
 
     /* Ajuste de reseñas */
@@ -777,6 +787,11 @@ body.modal-open {
 
     .footer-logo {
         font-size: 1.5rem;
+    }
+
+    /* Ajuste extra de fuente si el móvil es extremadamente estrecho */
+    .btn {
+        font-size: 1.4rem;
     }
 }
 
