@@ -677,9 +677,9 @@ body.modal-open {
 @media (max-width: 768px) {
     .header {
         height: auto;
-        padding: 15px 5%;
+        padding: 12px 5%;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         justify-content: center;
     }
 
@@ -691,7 +691,6 @@ body.modal-open {
         height: 30px;
     }
 
-    /* En lugar de ocultarlo, lo ordenamos en fila compacta debajo del título */
     .navbar {
         display: flex !important;
         justify-content: center;
@@ -701,7 +700,7 @@ body.modal-open {
 
     .navbar a {
         font-size: 13px;
-        margin-left: 0; /* Quitamos el margen izquierdo excesivo de PC */
+        margin-left: 0;
         padding-bottom: 2px;
     }
 
@@ -713,41 +712,43 @@ body.modal-open {
         width: 80%; 
     }
 
-    /* Ajuste del comportamiento del panel deslizante en móvil */
+    /* --- PANEL DESLIZANTE INTELIGENTE --- */
     .sliding-panel {
-        position: fixed;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        /* Usamos dvh (Dynamic VH) para que responda dinámicamente a la presencia de la barra de iOS */
-        height: 100dvh; 
-        background-color: #e3e3e3;
-        z-index: 15;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end; /* Clava los botones abajo del todo de la zona útil */
-        padding: 0;
+        height: 100dvh; /* Altura dinámica real del iPhone */
+        justify-content: flex-end; 
     }
 
     .panel-content {
-        flex-direction: row;        /* Vuelven a estar en fila horizontal como en PC */
-        height: 120px;              /* Altura idéntica y compacta */
+        flex-direction: row;        
+        height: 120px;              
         width: 100%;
-        gap: 0; 
-        /* Añadimos un minúsculo margen de seguridad nativo por si la barra está escondida del todo */
+        /* El padding-bottom evita que los botones se peguen a la barra de Safari */
         padding-bottom: env(safe-area-inset-bottom);
-        background-color: #ffffff;  /* Evita que se vea transparencia rara detrás del área de iOS */
+        background-color: #ffffff;
     }
 
     .btn {
-        flex: 1;                    /* Se reparten el ancho al 50% cada uno */
-        font-size: 1.8rem;          /* Tamaño de letra adaptado */
+        flex: 1;                    
+        font-size: 1.6rem;          
         height: 100%;               
         padding-left: 0;
-        justify-content: center;    /* Texto centrado en su bloque */
-        border-radius: 0;           /* Totalmente cuadrados */
-        box-shadow: none;        
+        justify-content: center;    
+        border-radius: 0;           
         outline-offset: -12px;      
+    }
+
+    /* --- CORRECCIÓN DE LA PESTAÑA (TAB) --- */
+    .tab-trigger {
+        padding: 10px 40px;
+        /* Asegura que no se solape con la barra inferior del iPhone al estar cerrada */
+        margin-bottom: env(safe-area-inset-bottom); 
+    }
+
+    .tab-trigger.active {
+        /* Usamos 100dvh y le restamos el espacio del header móvil (aprox 110px) */
+        /* Así la pestaña se queda pegada debajo del menú y siempre es visible */
+        bottom: calc(100dvh - 110px); 
+        border-radius: 0 0 20px 20px;
     }
 
     /* Ajuste de reseñas */
@@ -762,7 +763,6 @@ body.modal-open {
     .review-text {
         font-size: 1.4rem;
         line-height: 1.3;
-        margin-bottom: 20px;
     }
 
     .review-stars {
@@ -771,7 +771,6 @@ body.modal-open {
         margin-bottom: 30px;
     }
     
-    /* Espaciado del visualizador de imágenes en móviles */
     .modal-body-images {
         padding: 0 2% 20px 2%;
         gap: 15px;
@@ -785,26 +784,20 @@ body.modal-open {
     }
 
     .tab-trigger {
-        padding: 10px 40px;
-        width: 150px;
-        text-align: center;
+        width: 140px;
+    }
+
+    .tab-trigger.active {
+        /* Un pelín más de margen en móviles muy pequeños */
+        bottom: calc(100dvh - 115px);
     }
 
     .review-text {
         font-size: 1.1rem;
     }
 
-    .footer-right {
-        gap: 20px;
-    }
-
-    .footer-logo {
-        font-size: 1.5rem;
-    }
-
-    /* Ajuste extra de fuente si el móvil es extremadamente estrecho */
     .btn {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 }
 
