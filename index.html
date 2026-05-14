@@ -11,15 +11,23 @@
 </head>
 <body oncontextmenu="return false;">
     <div class="fixed-bg-canvas"></div>
-    <header class="header">
-    <a href="index.html" class="logo">Foque</a>
-    <nav class="navbar">
-        <a href="index.html">Inicio</a>
-        <a href="#carta" id="openCartaNav">Carta</a>
-        <a href="nosotros.html">Sobre Nosotros</a>
-        <a href="contacto.html">Contacto</a>
-    </nav>
-</header>
+        <header class="header">
+            <a href="index.html" class="logo">Foque</a>
+            
+            <!-- Este bloque debe estar en TODAS las páginas -->
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="navbar" id="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="#carta" id="openCartaNav">Carta</a>
+                <a href="nosotros.html">Sobre Nosotros</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+         </header>
 
     <main class="hero">
         <section class="hero">
@@ -62,10 +70,12 @@
         <button class="nav-btn next" id="nextBtn">›</button>
     </section>
 
+    <!-- Busca la sección del sliding-panel y déjala así: -->
     <section class="sliding-panel" id="slidingPanel">
         <div class="panel-content">
-            <button class="btn">MENÚ</button>
-            <button class="btn" id="openCartaPanel">CARTA</button>
+            <!-- Añadimos clases específicas para las animaciones opuestas -->
+            <button class="btn btn-menu">MENÚ</button>
+            <button class="btn btn-carta" id="openCartaPanel">CARTA</button>
         </div>
     </section>
 
