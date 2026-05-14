@@ -676,8 +676,11 @@ body.modal-open {
 /* Móviles Grandes y Tablets (768px o menos) */
 @media (max-width: 768px) {
     .header {
-        height: 70px;
-        justify-content: center; /* Centramos logo al ocultar menú en móviles */
+        height: auto;
+        padding: 15px 5%;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
     }
 
     .logo {
@@ -688,8 +691,21 @@ body.modal-open {
         height: 30px;
     }
 
-    /* Ocultamos navbar y flechas del carrusel por completo en móvil */
-    .navbar, .nav-btn {
+    /* En lugar de ocultarlo, lo ordenamos en fila compacta debajo del título */
+    .navbar {
+        display: flex !important;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        margin-left: 0; /* Quitamos el margen izquierdo excesivo de PC */
+        padding-bottom: 2px;
+    }
+
+    .nav-btn {
         display: none !important;
     }
 
@@ -741,6 +757,10 @@ body.modal-open {
 
 /* Móviles Pequeños (480px o menos) */
 @media (max-width: 480px) {
+    .navbar a {
+        font-size: 11px;
+    }
+
     .tab-trigger {
         padding: 10px 40px;
         width: 150px;
