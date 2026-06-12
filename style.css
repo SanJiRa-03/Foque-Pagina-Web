@@ -1051,22 +1051,20 @@ body.modal-open {
         top: 76px; 
     }
 
-    /* --- CORRECCIÓN DE LA FLECHA ANIMADA --- */
-    /* Centrado horizontal estricto sin anular su posición vertical nativa (para que suba) */
     .tab-trigger {
+        bottom: 0 !important; 
         left: 50% !important;
-        transform: translateX(-50%) !important; 
+        transform: translateX(-50%) translateY(0) !important; 
         right: auto !important;
         margin: 0 auto !important;
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important; 
     }
 
-    /* Cuando se activa, acompaña al panel y se posiciona de forma relativa al borde superior del mismo */
     .tab-trigger.active {
-        top: auto !important; /* Eliminamos el top estático que la rompía */
-        bottom: calc(100svh - 76px - 45px) !important; /* Tu cálculo original restaurado para que viaje hacia arriba */
-        bottom: calc(100dvh - 76px - 45px) !important; /* Adaptado a viewports móviles dinámicos */
+        bottom: 0 !important; 
+        top: auto !important;
         left: 50% !important;
-        transform: translateX(-50%) !important;
+        transform: translateX(-50%) translateY(calc(-100dvh + 76px)) !important;
         right: auto !important;
         z-index: 10006 !important;
     }
@@ -1188,18 +1186,17 @@ body.modal-open {
 
 /*MÓVILES MUY PEQUEÑOS*/
 @media (max-width: 480px) {
-    .tab-trigger { 
+   .tab-trigger { 
         width: 120px !important; 
         padding: 8px 15px !important;
         font-size: 0.85rem !important;
+        transform: translateX(-50%) translateY(0) !important;
     }
 
     .tab-trigger.active { 
+        bottom: 0 !important;
         top: auto !important;
-        bottom: calc(100svh - 76px - 45px) !important;
-        bottom: calc(100dvh - 76px - 45px) !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
+        transform: translateX(-50%) translateY(calc(-100dvh + 76px)) !important;
         right: auto !important;
     }
 
@@ -1220,19 +1217,14 @@ body.modal-open {
         font-size: 1.8rem !important;
         width: 95% !important;
     }
-    .tab-trigger {
+   .tab-trigger {
         width: 110px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        right: auto !important;
+        transform: translateX(-50%) translateY(0) !important;
     }
     .tab-trigger.active {
         width: 110px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        right: auto !important;
+        bottom: 0 !important;
         top: auto !important;
-        bottom: calc(100svh - 76px - 45px) !important;
-        bottom: calc(100dvh - 76px - 45px) !important;
+        transform: translateX(-50%) translateY(calc(-100dvh + 76px)) !important;
     }
 }
