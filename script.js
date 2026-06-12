@@ -131,3 +131,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const imageColumns = document.querySelectorAll('.nosotros-image-col');
+
+    imageColumns.forEach(col => {
+        // Saltamos bloqueos de ratón globales
+        col.style.pointerEvents = "auto";
+        const imgInside = col.querySelector('.zoom-image');
+        if(imgInside) imgInside.style.pointerEvents = "none"; 
+
+        // 1. Ampliar imagen al hacer click
+        col.addEventListener('click', function(e) {
+            if(this.classList.contains('fullscreen-mode')) return;
+
+            const parentRow = this.closest('.nosotros-row');
+            parentRow.classList.add('has-fullscreen');
+            this.classList.add('fullscreen-mode');
+        });
+    });
+
+    // Función global para cerrar cualquier imagen expandida
+    const resetFullscreenImage = () => {
+        const activeFullscreen = document.querySelector('.nosotros-image-col.fullscreen-mode');
+        if (activeFullscreen) {
+            const parentRow = activeFullscreen.closest('.nosotros-row');
+            parentRow.classList.remove('has-fullscreen');
+            activeFullscreen.classList.remove('fullscreen-mode');
+        }
+    };
+
+    // 2. DETECTOR DE SCROLL MOUSE: Cualquier movimiento de rueda cierra el modo pantalla completa
+    window.addEventListener('wheel', () => {
+        resetFullscreenImage();
+    }, { passive: true });
+
+    // 3. DETECTOR DE SCROLL TÁCTIL (Móviles/Trackpads): Al deslizar el dedo en cualquier dirección, se cierra
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        let touchEndY = e.touches[0].clientY;
+        // Si el movimiento vertical supera los 20px (arriba o abajo), cerramos la imagen
+        if (Math.abs(touchStartY - touchEndY) > 20) { 
+            resetFullscreenImage();
+        }
+    }, { passive: true });
+});

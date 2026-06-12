@@ -548,12 +548,13 @@ body.modal-open {
     opacity: 1;
 }
 
-/* --- ESTILOS DE CONTACTO --- */
+/*CONTACTO*/
 .contacto-wrapper {
     padding: 160px 10% 80px;
     min-height: 100vh;
     background: transparent !important; 
     text-align: center;
+    box-sizing: border-box;
 }
 
 .contacto-grid {
@@ -562,15 +563,19 @@ body.modal-open {
     max-width: 1100px;
     margin: 40px auto 0;
     text-align: left;
+    width: 100%;
 }
 
 .contacto-block {
-    flex: 1;
+    flex: 1; /* Hace que ambas columnas midan exactamente lo mismo (50% cada una) */
     background: rgba(17, 17, 17, 0.75) !important; 
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(5px);
     padding: 40px;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .contacto-block h3 {
@@ -578,14 +583,17 @@ body.modal-open {
     color: #94cdff;
     text-transform: uppercase;
     font-size: 1.4rem;
+    margin-top: 0;
     margin-bottom: 25px;
     letter-spacing: 1px;
 }
 
+/*ELEMENTOS DEL FORMULARIO DE CONTACTO (IZQUIERDA)*/
 .contacto-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
 }
 
 .input-group input, .input-group textarea {
@@ -598,6 +606,7 @@ body.modal-open {
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
+    box-sizing: border-box;
 }
 
 .input-group input:focus, .input-group textarea:focus {
@@ -621,7 +630,79 @@ body.modal-open {
 .btn-submit:hover {
     background-color: #94cdff;
 }
+/*COLUMNA DE RESEÑAS*/
+.review-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
+/*GOOGLE REVIEWS*/
+.google-review-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    width: 100%;
+    max-width: 450px;
+    box-sizing: border-box;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    margin-bottom: 20px;
+}
+
+.google-card-icon {
+    font-size: 2rem;
+    background: rgba(255, 255, 255, 0.04);
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.google-card-text {
+    text-align: center;
+}
+
+.google-card-text h4 {
+    color: #fff;
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.google-card-text p {
+    color: #888;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.google-review-card:hover {
+    border-color: #4285F4 !important;
+    background: rgba(66, 133, 244, 0.04) !important; 
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(66, 133, 244, 0.08);
+}
+
+.google-review-card:hover .google-card-icon {
+    background: rgba(66, 133, 244, 0.15);
+    transform: scale(1.08) rotate(15deg);
+}
+
+/*CANALES DIRECTOS*/
 .info-subtitle {
     color: #bbb;
     margin-bottom: 30px;
@@ -632,6 +713,7 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
 }
 
 .card-link {
@@ -644,6 +726,7 @@ body.modal-open {
     border-radius: 8px;
     text-decoration: none;
     transition: 0.3s;
+    box-sizing: border-box;
 }
 
 .card-icon {
@@ -658,26 +741,180 @@ body.modal-open {
 .card-text h4 {
     color: #fff;
     font-size: 1.1rem;
-    margin-bottom: 4px;
+    margin: 0 0 4px 0;
 }
 
 .card-text p {
     color: #888;
+    margin: 0;
     font-size: 0.9rem;
 }
 
+/* Hovers de los canales directos */
 .whatsapp-card:hover {
-    border-color: #25D366;
-    background: rgba(37, 211, 102, 0.05);
+    border-color: #25D366 !important;
+    background: rgba(37, 211, 102, 0.04) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(37, 211, 102, 0.08);
 }
 
 .phone-card:hover {
-    border-color: #94cdff;
-    background: rgba(148, 205, 255, 0.05);
+    border-color: #94cdff !important;
+    background: rgba(148, 205, 255, 0.04) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(148, 205, 255f, 0.08);
 }
 
-/* --- MEDIA QUERIES --- */
-/* --- TABLETS Y LAPTOPS --- */
+/*MEDIA QUERY PARA MÓVILES*/
+@media (max-width: 850px) {
+    .contacto-grid {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+/*ESTILOS SOBRE NOSOTROS*/
+.nosotros-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    background: transparent !important;
+}
+
+/*SECCIÓN HERO*/
+.nosotros-hero {
+    width: 100%;
+    height: calc(100vh - 90px); 
+    margin-top: 90px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/bg.png'); /* Puedes cambiarla por tu foto ideal */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*PANTALLA COMPLETA*/
+.nosotros-section-block {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.nosotros-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.nosotros-row.reverse .nosotros-text-col { order: 2; }
+.nosotros-row.reverse .nosotros-image-col { order: 1; }
+
+.nosotros-text-col {
+    width: 100%;
+    padding: 0 10%;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    box-sizing: border-box;
+}
+
+.nosotros-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #bbb;
+    margin-bottom: 20px;
+}
+
+.nosotros-row.has-fullscreen .nosotros-text-col {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.nosotros-image-col {
+    width: 100%;
+    height: 100%; 
+    overflow: hidden; 
+    position: relative;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nosotros-image-col:not(.fullscreen-mode):hover .zoom-image {
+    transform: scale(1.05);
+}
+
+.nosotros-image-col.fullscreen-mode {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    z-index: 999999 !important;
+    background-color: rgba(17, 17, 17, 0.95) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none;
+}
+
+.nosotros-image-col.fullscreen-mode .zoom-image {
+    width: auto !important;
+    height: auto !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    object-fit: contain !important; 
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    transform: scale(1) !important;
+}
+
+.nosotros-image-col.fullscreen-mode .zoom-image {
+    transform: scale(1) !important;
+}
+
+/*ADAPTACIÓN RESPONSIVE*/
+@media (max-width: 900px) {
+    .nosotros-hero {
+        height: calc(100vh - 76px);
+        margin-top: 76px;
+    }
+    .nosotros-section-block {
+        height: auto;
+        padding: 80px 5%;
+    }
+    .nosotros-row, .nosotros-row.reverse {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    .nosotros-row.reverse .nosotros-text-col { order: 1; }
+    .nosotros-row.reverse .nosotros-image-col { order: 2; }
+    
+    .nosotros-image-col {
+        height: 45vh;
+    }
+}
+
+/*MEDIA QUERIES*/
+/*TABLETS Y ORDENADORES*/
 @media (max-width: 1024px) {
     .header { padding: 0 5%; }
     .nav-btn { display: block; }
@@ -686,7 +923,7 @@ body.modal-open {
     .next { right: 5%; }
 }
 
-/* --- PÁGINAS SECUNDARIAS --- */
+/*PÁGINAS SECUNDARIAS*/
 @media (max-width: 900px) {
     .nosotros-container, .contacto-grid {
         flex-direction: column;
@@ -697,7 +934,7 @@ body.modal-open {
     .section-title-premium { font-size: 2.5rem; }
 }
 
-/* --- MÓVILES (Menú Hamburguesa y Ajustes) --- */
+/*MÓVILES (Menú Hamburguesa y Ajustes)*/
 @media (max-width: 768px) {
     /* HEADER COMPACTO */
     .header {
@@ -755,7 +992,7 @@ body.modal-open {
         border-bottom: 1px solid #e3e3e3;
     }
 
-    /* PANEL INTELIGENTE */
+    /*PANEL INTELIGENTE*/
     .sliding-panel {
         height: calc(100svh - 76px); 
     }
@@ -769,7 +1006,7 @@ body.modal-open {
         padding: 8px 40px;
     }
 
-    /* BOTONES DEL PANEL */
+    /*BOTONES DEL PANEL*/
     .btn {
         font-size: 1.6rem;
         justify-content: center;
@@ -793,22 +1030,21 @@ body.modal-open {
     }
 
     .modal-body-images {
-        margin-top: 70px !important; /* Espacio para que la cabecera no tape la imagen */
+        margin-top: 70px !important;
         padding: 10px !important;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .close-modal {
-        /* Aseguramos que el estilo del texto sea el mismo */
+    .close-modal {    
         color: #e3e3e3;
         font-size: 1.1rem;
         font-weight: bold;
         text-transform: uppercase;
         cursor: pointer;
         letter-spacing: 1px;
-        background: none; /* Sin fondos raros */
+        background: none;
         border: none;
     }
 
@@ -840,7 +1076,7 @@ body.modal-open {
         padding-top: 100px; 
     }
 
-   /* --- FOOTER RESPONSIVE --- */
+   /*FOOTER RESPONSIVE*/
    .footer-container, .footer-right, .footer-col {
         flex-direction: column !important;
         align-items: center !important;
@@ -885,7 +1121,7 @@ body.modal-open {
     }
 }
 
-/* --- MÓVILES MUY PEQUEÑOS --- */
+/*MÓVILES MUY PEQUEÑOS*/
 @media (max-width: 480px) {
     .tab-trigger { 
         width: 120px !important; 
