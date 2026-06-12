@@ -762,7 +762,7 @@ body.modal-open {
     border-color: #94cdff !important;
     background: rgba(148, 205, 255, 0.04) !important;
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(148, 205, 255f, 0.08);
+    box-shadow: 0 12px 30px rgba(148, 205, 255, 0.08);
 }
 
 /*MEDIA QUERY PARA MÓVILES*/
@@ -891,7 +891,27 @@ body.modal-open {
 }
 
 /*ADAPTACIÓN RESPONSIVE*/
-@media (max-width: 900px) {
+.mobile-break {
+    display: none;
+}
+
+@media (max-width: 900px) {    
+    .mobile-break {
+        display: block;
+    }
+
+    /* Título principal optimizado en tamaño y espaciado para las 2 líneas */
+    .section-title-premium, 
+    .nosotros-hero h1, 
+    .nosotros-hero h2 { 
+        font-size: 2.6rem !important; 
+        line-height: 1.1 !important;  
+        text-align: center !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 auto 20px auto !important;
+    }
+
     .nosotros-hero {
         height: calc(100vh - 76px);
         margin-top: 76px;
@@ -932,9 +952,7 @@ body.modal-open {
     .nosotros-container { padding-top: 130px; text-align: center; }
     .contacto-wrapper { padding: 130px 5% 60px; }
     
-    .section-title-premium, 
-    .nosotros-hero h1, 
-    .nosotros-hero h2,
+    /* Mantiene los subtítulos h2 secundarios bajo control de tamaño */
     .nosotros-text-col h2 { 
         font-size: 2.2rem !important;
         text-align: center !important;
@@ -1023,26 +1041,34 @@ body.modal-open {
         border-bottom: 1px solid #e3e3e3;
     }
 
-    /*PANEL INTELIGENTE*/
+    /* PANEL INTELIGENTE ANTI-REBOTE SAFARI */
     .sliding-panel {
-        height: calc(100svh - 76px); 
+        height: calc(100svh - 76px) !important; 
+        height: calc(100dvh - 76px) !important; 
     }
 
     .sliding-panel.active { 
         top: 76px; 
     }
 
-   .tab-trigger {
+    /* --- CORRECCIÓN DE LA FLECHA ANIMADA --- */
+    /* Centrado horizontal estricto sin anular su posición vertical nativa (para que suba) */
+    .tab-trigger {
         left: 50% !important;
-        transform: translateX(-50%) !important; /* Centrado matemático exacto en el eje X */
+        transform: translateX(-50%) !important; 
         right: auto !important;
         margin: 0 auto !important;
     }
 
+    /* Cuando se activa, acompaña al panel y se posiciona de forma relativa al borde superior del mismo */
     .tab-trigger.active {
+        top: auto !important; /* Eliminamos el top estático que la rompía */
+        bottom: calc(100svh - 76px - 45px) !important; /* Tu cálculo original restaurado para que viaje hacia arriba */
+        bottom: calc(100dvh - 76px - 45px) !important; /* Adaptado a viewports móviles dinámicos */
         left: 50% !important;
-        transform: translateX(-50%) !important; /* Mantiene el centrado estricto al activarse */
+        transform: translateX(-50%) !important;
         right: auto !important;
+        z-index: 10006 !important;
     }
 
     /*BOTONES DEL PANEL*/
@@ -1054,7 +1080,7 @@ body.modal-open {
         outline-offset: -10px;
     }
 
-  .modal-header {
+    .modal-header {
         position: fixed !important;
         top: 0;
         left: 0;
@@ -1115,8 +1141,8 @@ body.modal-open {
         padding-top: 100px; 
     }
 
-   /*FOOTER RESPONSIVE*/
-   .footer-container, .footer-right, .footer-col {
+    /*FOOTER RESPONSIVE*/
+    .footer-container, .footer-right, .footer-col {
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
@@ -1162,8 +1188,16 @@ body.modal-open {
 
 /*MÓVILES MUY PEQUEÑOS*/
 @media (max-width: 480px) {
-    .tab-trigger, 
-    .tab-trigger.active {
+    .tab-trigger { 
+        width: 120px !important; 
+        padding: 8px 15px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .tab-trigger.active { 
+        top: auto !important;
+        bottom: calc(100svh - 76px - 45px) !important;
+        bottom: calc(100dvh - 76px - 45px) !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         right: auto !important;
@@ -1180,14 +1214,25 @@ body.modal-open {
         padding: 15px !important;
     }
 }
+
 @media (max-width: 400px) {
     .main-title {
         font-size: 1.8rem !important;
         width: 95% !important;
     }
     .tab-trigger {
+        width: 110px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         right: auto !important;
+    }
+    .tab-trigger.active {
+        width: 110px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: calc(100svh - 76px - 45px) !important;
+        bottom: calc(100dvh - 76px - 45px) !important;
     }
 }
