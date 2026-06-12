@@ -1041,7 +1041,6 @@ body.modal-open {
         border-bottom: 1px solid #e3e3e3;
     }
 
-    /* PANEL INTELIGENTE ANTI-REBOTE SAFARI */
     .sliding-panel {
         height: calc(100svh - 76px) !important; 
         height: calc(100dvh - 76px) !important; 
@@ -1057,7 +1056,7 @@ body.modal-open {
         transform: translateX(-50%) translateY(0) !important; 
         right: auto !important;
         margin: 0 auto !important;
-        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important; 
+        transition: transform 0.6s ease !important;    
     }
 
     .tab-trigger.active {
