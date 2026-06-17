@@ -316,7 +316,7 @@ body.modal-open {
 
 .review-item.active {
     opacity: 1;
-    visibility: visible;
+    visibility: visible !important;
     display: flex;
     animation: fadeIn 0.8s ease forwards;
 }
@@ -458,19 +458,33 @@ body.modal-open {
 
 
 /* --- SECCIÓN CONTACTO (Modificado subtítulo beige) --- */
+/* --- SECCIÓN CONTACTO (IGUALADA AL INDEX / HERO) --- */
 .contacto-wrapper {
-    padding: 120px 10% 80px;
-    min-height: 90vh; 
+    height: 100vh;
+    height: 100dvh; /* Altura real completa idéntica al Index */
+    padding: 90px 10% 0; /* 90px arriba para dejar hueco limpio al header */
     background: transparent !important; 
     text-align: center;
     box-sizing: border-box;
+    
+    /* Centrado vertical matemático de todo el contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Escalado premium del título para móviles y escritorio */
+.contacto-wrapper .section-title-premium {
+    font-size: clamp(2rem, 4.5vw, 3.5rem); 
+    margin-bottom: 2vh; /* Margen proporcional a la pantalla */
 }
 
 .contacto-grid {
     display: flex;
     gap: 50px;
     max-width: 1100px;
-    margin: 40px auto 0;
+    margin: 0 auto; /* Eliminamos el margen superior fijo */
     text-align: left;
     width: 100%;
 }
@@ -547,7 +561,6 @@ body.modal-open {
     justify-content: space-between;
 }
 
-/* Modificación del texto específico para que actúe como un subtítulo beige premium */
 .info-subtitle {
     color: #888 !important; 
     margin: 0; 
@@ -583,14 +596,12 @@ body.modal-open {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    
     border-radius: 50%;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     color: #e3e3e3;
 }
 
-/* Forzar que los iconos internos de FontAwesome o texto no hereden desfases */
 .google-card-icon *, .card-icon * {
     margin: 0 !important;
     padding: 0 !important;
@@ -601,34 +612,30 @@ body.modal-open {
 .google-card-text h4, .card-text h4 { color: #fff; margin: 0 0 6px 0; font-size: 1.2rem; font-weight: 600; letter-spacing: 0.5px; }
 .google-card-text p, .card-text p { color: #888; margin: 0; font-size: 0.95rem; line-height: 1.5; }
 
-/* HOVER UNIFICADO EN LAS TARJETAS (Google Review) */
 .google-review-card:hover { 
     border-color: #2c346b !important; 
-    background: rgba(44, 52, 107, 0.04) !important; /* Mismo fondo sutil basado en tu azul oscuro */
+    background: rgba(44, 52, 107, 0.04) !important; 
     transform: translateY(-4px); 
     box-shadow: 0 12px 30px rgba(44, 52, 107, 0.15); 
 }
 
-/* Efecto unificado en el círculo de Google: Crece y Gira */
 .google-review-card:hover .google-card-icon { 
-    background: #1c2242 !important; /* Azul oscuro limpio */
-    color: #fffbed !important;      /* Texto/icono en beige */
-    transform: scale(1.05) rotate(10deg) !important; /* Animación de escala + rotación */
+    background: #1c2242 !important; 
+    color: #fffbed !important;      
+    transform: scale(1.05) rotate(10deg) !important; 
 }
 
-/* HOVER UNIFICADO EN LAS TARJETAS (Teléfono) */
 .phone-card:hover { 
     border-color: #2c346b !important; 
-    background: rgba(44, 52, 107, 0.04) !important; /* Mismo fondo sutil basado en tu azul oscuro */
+    background: rgba(44, 52, 107, 0.04) !important; 
     transform: translateY(-4px); 
     box-shadow: 0 12px 30px rgba(44, 52, 107, 0.15); 
 }
 
-/* Efecto unificado en el círculo del Teléfono: Crece y Gira */
 .phone-card:hover .card-icon { 
-    background: #1c2242 !important; /* Azul oscuro limpio */
-    color: #fffbed !important;      /* Texto/icono en beige */
-    transform: scale(1.05) rotate(10deg) !important; /* Animación de escala + rotación */
+    background: #1c2242 !important; 
+    color: #fffbed !important;      
+    transform: scale(1.05) rotate(10deg) !important; 
 }
 
 
@@ -744,6 +751,15 @@ body.modal-open {
     z-index: 999999 !important; /* Por encima de cualquier header para evitar clics fantasma */
     overflow: hidden !important; /* FIX: ya no hace scroll aquí, ver .modal-scroll-area */
     box-sizing: border-box !important;
+    /* FIX iOS: bloquea selección de texto y el menú de "Copiar/Buscar" por
+       long-press en TODO el árbol del modal (no solo en el botón). El
+       problema persistía porque iOS puede activar la selección sobre el
+       CONTENEDOR con scroll (.modal-scroll-area) aunque la imagen en sí
+       tenga pointer-events:none; el long-press se calcula sobre la capa
+       que recibe el toque, no solo sobre el elemento visual final. */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 .modal-pdf.active {
@@ -764,6 +780,11 @@ body.modal-open {
     align-items: center !important;
     padding: 20px 20px 40px !important;
     box-sizing: border-box !important;
+    /* FIX iOS: refuerzo explícito, ya que ser el elemento con overflow
+       real es justo donde iOS evalúa el long-press para seleccionar. */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 /* Mientras la carta/bebidas está abierta, el header (y por tanto el menú
@@ -784,6 +805,11 @@ body:has(.modal-pdf.active) .header {
     flex-direction: column !important;
     gap: 25px !important; 
     z-index: 1000000 !important;
+    /* FIX iOS: último nivel de blindaje, justo donde viven las imágenes
+       de la carta (lo que el usuario realmente toca al hacer scroll). */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 /* FIX: el sticky ahora vive dentro de .modal-scroll-area (que sí tiene
@@ -803,6 +829,7 @@ body:has(.modal-pdf.active) .header {
     z-index: 2000000 !important; /* z-index masivo para anular el menú hamburguesa inferior */
     flex-shrink: 0 !important; /* que no se encoja al apilarse con la carta */
     padding: 0 !important;
+    touch-action: manipulation !important; /* FIX iOS: mismo aislamiento táctil que el botón */
 }
 
 /* Botón con menor protagonismo (texto y aspa discretos y legibles) */
@@ -826,6 +853,15 @@ body:has(.modal-pdf.active) .header {
     -webkit-backdrop-filter: blur(4px) !important;
     transition: all 0.25s ease !important;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important; 
+    /* FIX iOS: aísla el botón de cualquier gesto táctil que pueda
+       "filtrarse" hacia la imagen que queda debajo (selección de
+       texto/imagen, long-press, zoom por doble toque). touch-action
+       le dice al navegador que este elemento solo acepta un toque
+       simple, sin gestos adicionales que delegar más abajo. */
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
 }
 
 /* Ajuste del tamaño del aspa */
@@ -964,12 +1000,13 @@ body:has(.modal-pdf.active) .header {
    4. ADAPTACIÓN EN DISPOSITIVOS MEDIANOS (max-width: 900px)
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
+    .contacto-wrapper {
+        height: auto !important; /* Rompe la pantalla completa en móvil para que no se corte el contenido */
+        padding: 110px 6% 60px;
+    }
     .contacto-grid {
         flex-direction: column;
         gap: 30px;
-    }
-    .contacto-wrapper {
-        padding: 110px 6% 60px;
     }
 }
 
@@ -1022,7 +1059,7 @@ body:has(.modal-pdf.active) .header {
     .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg); }
     
     .navbar { 
-        display: none !important; 
+        display: none; /* <--- Quitamos el !important de aquí para evitar conflictos */
         position: absolute; 
         top: 76px; 
         left: 0; 
@@ -1034,9 +1071,11 @@ body:has(.modal-pdf.active) .header {
         box-shadow: 0 15px 25px rgba(0,0,0,0.1); 
         z-index: 10004; 
     }
-    .navbar a { margin: 12px 0; font-size: 18px; }
-    .navbar.mobile-active { display: flex !important; }
-    
+
+    .navbar.mobile-active { 
+        display: flex !important;
+    }
+    .navbar a { margin: 12px 0; font-size: 18px; }    
     /* Carrusel optimizado */
     .reviews-section { padding: 60px 0; }
     .carousel-container { width: 92% !important; margin: 0 auto !important; position: relative; }
