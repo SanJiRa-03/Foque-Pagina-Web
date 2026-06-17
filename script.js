@@ -110,26 +110,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 6000);
     }
 
-    // --- 4. CONTROL DE MODALES INDEPENDIENTES (Carta y Bebidas) ---
+    // --- 4. CONTROL DE MODALES INDEPENDIENTES (CORREGIDO APERTURA LIMPIA) ---
     const modalCarta = document.getElementById('pdfModalCarta');
     const modalBebidas = document.getElementById('pdfModalBebidas');
     
     const closeCarta = document.getElementById('closeCarta');
     const closeBebidas = document.getElementById('closeBebidas');
 
-    const triggersCarta = [document.getElementById('openCartaNav'), document.getElementById('openCartaPanel')];
-    const triggersBebidas = [document.getElementById('openBebidasNav'), document.getElementById('openBebidasPanel')];
+    // Separamos los disparadores del menú de arriba de los botones del panel inferior
+    const triggersNav = [document.getElementById('openCartaNav'), document.getElementById('openBebidasNav')];
+    const btnCartaPanel = document.getElementById('openCartaPanel');
+    const btnBebidasPanel = document.getElementById('openBebidasPanel');
 
     const abrirModal = (modal) => {
         if (!modal) return;
         modal.classList.add('active');
         document.body.classList.add('modal-open');
 
-        // FIX iOS: fuerza que el modal arranque siempre mostrando la
-        // página 1 arriba del todo, sin importar el scroll previo de la
-        // página o de una apertura anterior del modal. Sin esto, en
-        // iPhone la carta podía aparecer "desplazada" a mitad de las
-        // imágenes en vez de empezar por la primera página.
         const scrollArea = modal.querySelector('.modal-scroll-area');
         if (scrollArea) {
             scrollArea.scrollTop = 0;
@@ -150,47 +147,44 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTabVisibility();
     };
 
-    triggersCarta.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
-    triggersBebidas.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
+    // 1. Los enlaces del menú superior abren normal al hacer click
+    if(document.getElementById('openCartaNav')) document.getElementById('openCartaNav').addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalCarta); });
+    if(document.getElementById('openBebidasNav')) document.getElementById('openBebidasNav').addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalBebidas); });
 
-    // FIX iOS: el cierre se gestiona con 'click' (que en touch se dispara
-    // tras un toque limpio completo, en el mismo punto). Mantenemos el
-    // 'click' tanto para touch como para ratón/trackpad; no hace falta
-    // distinguir, ver explicación del bug real más abajo.
+    // 2. Los botones gigantes del panel SOLO se abren con un CLICK limpio y consciente (nunca con roces o pointerdown)
+    if (btnCartaPanel) {
+        btnCartaPanel.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            abrirModal(modalCarta);
+        });
+    }
+
+    if (btnBebidasPanel) {
+        btnBebidasPanel.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            abrirModal(modalBebidas);
+        });
+    }
+
+    // Gestión del cierre de modales
     const cerrarConClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         cerrarModales();
-        // Ventana breve en la que ignoramos cualquier click sobre el menú
-        // hamburguesa, por si el mismo gesto táctil se interpretase también
-        // como toque sobre él en algún navegador.
         modalRecienCerrado = true;
         setTimeout(() => { modalRecienCerrado = false; }, 300);
     };
+    
     if (closeCarta) closeCarta.addEventListener('click', cerrarConClick);
     if (closeBebidas) closeBebidas.addEventListener('click', cerrarConClick);
 
-    // CAUSA REAL DEL BUG REPORTADO: al tocar el aspa, el menú hamburguesa
-    // se abría/cerraba como si también hubiera recibido el toque. No era
-    // selección de texto ni long-press: era un problema de timing con la
-    // regla CSS `body:has(.modal-pdf.active) .header { pointer-events:none }`.
-    //
-    // Esa regla depende de la clase 'active' del modal. Si cerrábamos el
-    // modal (quitando 'active') en 'touchstart' —es decir, ANTES de que el
-    // dedo se levante— el CSS se recalculaba al instante: el header volvía
-    // a ser clicable a mitad del mismo gesto táctil. Cuando el dedo se
-    // levantaba (touchend), el header YA estaba activo otra vez, y ese
-    // mismo levantamiento se interpretaba como un click sobre el menú
-    // hamburguesa que justo coincide en esa zona de la pantalla.
-    //
-    // Solución: cerrar el modal solo en 'click' (que el navegador dispara
-    // después de touchend, una vez completado el gesto), nunca antes. Así
-    // el header permanece bloqueado (pointer-events:none) durante TODO el
-    // gesto táctil, y al levantar el dedo ya no hay nada debajo que pueda
-    // reaccionar a ese mismo toque.
-    [modalCarta, modalBebidas].forEach(modal => {
-        if (!modal) return;
-        modal.addEventListener('selectstart', (e) => e.preventDefault());
-        modal.addEventListener('contextmenu', (e) => e.preventDefault());
-    });
+    if (modalCarta && modalBebidas) {
+        [modalCarta, modalBebidas].forEach(modal => {
+            if (!modal) return;
+            modal.addEventListener('selectstart', (e) => e.preventDefault());
+            modal.addEventListener('contextmenu', (e) => e.preventDefault());
+        });
+    }
 });
