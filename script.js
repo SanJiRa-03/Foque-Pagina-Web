@@ -131,8 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTabVisibility();
     };
 
-    triggersCarta.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
-    triggersBebidas.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
+    triggersCarta.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
+triggersBebidas.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
 
     // FIX iOS: el cierre se gestiona con 'click' (que en touch se dispara
     // tras un toque limpio completo, en el mismo punto). Mantenemos el
