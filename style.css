@@ -803,6 +803,7 @@ body:has(.modal-pdf.active) .header {
     z-index: 2000000 !important; /* z-index masivo para anular el menú hamburguesa inferior */
     flex-shrink: 0 !important; /* que no se encoja al apilarse con la carta */
     padding: 0 !important;
+    touch-action: manipulation !important; /* FIX iOS: mismo aislamiento táctil que el botón */
 }
 
 /* Botón con menor protagonismo (texto y aspa discretos y legibles) */
@@ -826,6 +827,15 @@ body:has(.modal-pdf.active) .header {
     -webkit-backdrop-filter: blur(4px) !important;
     transition: all 0.25s ease !important;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important; 
+    /* FIX iOS: aísla el botón de cualquier gesto táctil que pueda
+       "filtrarse" hacia la imagen que queda debajo (selección de
+       texto/imagen, long-press, zoom por doble toque). touch-action
+       le dice al navegador que este elemento solo acepta un toque
+       simple, sin gestos adicionales que delegar más abajo. */
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
 }
 
 /* Ajuste del tamaño del aspa */

@@ -126,6 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
     triggersCarta.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
     triggersBebidas.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
 
-    if (closeCarta) closeCarta.addEventListener('pointerdown', cerrarModales);
-    if (closeBebidas) closeBebidas.addEventListener('pointerdown', cerrarModales);
+    // FIX iOS: cerrar con 'click' en vez de 'pointerdown'. El cierre ya no
+    // es time-sensitive (no hay animación que sincronizar como en la
+    // pestaña), así que usamos el evento que el navegador dispara solo
+    // tras completar un toque limpio (touchstart+touchend en el mismo
+    // punto). Esto evita que, al levantar el dedo, el resto del gesto
+    // "se filtre" hacia la imagen de la carta que queda debajo y la
+    // seleccione o haga long-press sobre ella.
+    // stopPropagation() además evita que el click llegue a cualquier
+    // listener puesto en el documento/imagen subyacente.
+    const cerrarConClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        cerrarModales();
+    };
+    if (closeCarta) closeCarta.addEventListener('click', cerrarConClick);
+    if (closeBebidas) closeBebidas.addEventListener('click', cerrarConClick);
 });
