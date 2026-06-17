@@ -1,19 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. MENÚ HAMBURGUESA ---
-    const mobileMenu = document.getElementById('mobile-menu');
+   const mobileMenu = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
-
-    // FIX iOS (red de seguridad adicional, ver bloque 4 más abajo para la
-    // causa raíz y el fix principal): si justo se acaba de cerrar un modal,
-    // ignoramos el siguiente click sobre el menú hamburguesa durante una
-    // ventana muy breve. Esto cubre navegadores donde `:has()` no esté
-    // soportado o se comporte de forma distinta a Safari/iOS.
     let modalRecienCerrado = false;
 
     if (mobileMenu && navMenu) {
         mobileMenu.addEventListener('click', (e) => {
-            if (modalRecienCerrado) { return; }
+            // NUEVO: Si la carta, las bebidas o el panel inferior están abiertos, bloqueamos el menú
+            const panelActivo = document.getElementById('slidingPanel')?.classList.contains('active');
+            const cartaActiva = document.getElementById('pdfModalCarta')?.classList.contains('active');
+            const bebidasActivas = document.getElementById('pdfModalBebidas')?.classList.contains('active');
+
+            if (modalRecienCerrado || panelActivo || cartaActiva || bebidasActivas) { 
+                e.preventDefault();
+                e.stopPropagation();
+                return; 
+            }
+            
             e.stopPropagation();
             navMenu.classList.toggle('mobile-active');
             mobileMenu.classList.toggle('is-active');

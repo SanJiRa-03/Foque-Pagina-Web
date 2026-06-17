@@ -744,22 +744,21 @@ body.modal-open {
     left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    height: 100dvh !important; /* CORREGIDO: altura real visible en iOS */
-    background-color: rgba(11, 11, 11, 0.88) !important;
-    backdrop-filter: blur(10px) !important;       
-    -webkit-backdrop-filter: blur(10px) !important; 
-    z-index: 999999 !important; /* Por encima de cualquier header para evitar clics fantasma */
-    overflow: hidden !important; /* FIX: ya no hace scroll aquí, ver .modal-scroll-area */
+    height: 100dvh !important;
+    
+    /* OPTIMIZACIÓN: Quitamos el blur que ralentiza el scroll y usamos un fondo un poco más opaco */
+    background-color: rgba(11, 11, 11, 0.96) !important;
+    
+    z-index: 999999 !important; 
+    overflow: hidden !important; 
     box-sizing: border-box !important;
-    /* FIX iOS: bloquea selección de texto y el menú de "Copiar/Buscar" por
-       long-press en TODO el árbol del modal (no solo en el botón). El
-       problema persistía porque iOS puede activar la selección sobre el
-       CONTENEDOR con scroll (.modal-scroll-area) aunque la imagen en sí
-       tenga pointer-events:none; el long-press se calcula sobre la capa
-       que recibe el toque, no solo sobre el elemento visual final. */
     -webkit-user-select: none !important;
     user-select: none !important;
     -webkit-touch-callout: none !important;
+
+    /* Fuerza al móvil a usar la tarjeta gráfica (GPU) para suavizar el rendimiento */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .modal-pdf.active {
@@ -888,6 +887,11 @@ body:has(.modal-pdf.active) .header {
     display: block !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
     border-radius: 4px !important;
+    
+    /* OPTIMIZACIÓN DE RENDIMIENTO */
+    /*rendering-intent: relative-colorimetric;*/
+    image-rendering: -webkit-optimize-contrast;
+    will-change: transform; /* Avisa al navegador que se va a mover con scroll */
 }
 
 /* Limpieza absoluta de pseudo-elementos conflictivos anteriores */
