@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foque | Contacto</title>
-    <link rel="icon" type="image/png" href="images/Icono_SinFondo.png">
+    <link rel="icon" type="image/png" href="images/Logo_Beige_SinNombre.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://db.onlinewebfonts.com/c/b592736c06bab787133131c6a6d8992d?family=LTCGoudyHeavyfaceOT" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -25,7 +25,7 @@
         <nav class="navbar" id="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="#" id="openCartaNav">Carta</a>
-            <a href="nosotros.html">Sobre Nosotros</a>
+            <a href="#" id="openBebidasNav">Bebidas</a>
             <a href="contacto.html" class="active">Contacto</a>
         </nav>
     </header>
@@ -34,10 +34,9 @@
         <h1 class="section-title-premium">Ponte en contacto</h1>
         
         <div class="contacto-grid">
-            
            <div class="contacto-block review-block">            
                 <h3>Deja tu reseña</h3>
-                <a href="TU_ENLACE_DIRECTO_DE_GOOGLE_AQUÍ" target="_blank" rel="noopener noreferrer" class="google-review-card">
+                <a href="https://g.page/r/CbHiAejo5kKWEBM/review" target="_blank" rel="noopener noreferrer" class="google-review-card">
                     <div class="google-card-icon">⭐</div>
                     <div class="google-card-text">
                         <h4>¿Nos dejas una reseña?</h4>
@@ -48,17 +47,8 @@
 
             <div class="contacto-block info-block">
                 <h3>Canales Directos</h3>
-                <p class="info-subtitle">¿Prefieres algo más rápido? Escríbenos o llámanos directamente.</p>
-                
-                <div class="direct-links">
-                    <a href="https://wa.me/34653813796?text=¡Hola!%20Quería%20hacer%20una%20consulta" target="_blank" rel="noopener noreferrer" class="card-link whatsapp-card">
-                        <span class="card-icon"><i class="fa-brands fa-whatsapp"></i></span>
-                        <div class="card-text">
-                            <h4>WhatsApp</h4>
-                            <p>Respuesta rápida</p>
-                        </div>
-                    </a>
-
+                <p class="info-subtitle">¿Prefieres algo más rápido? Llámanos directamente.</p>
+                <div class="direct-links">                  
                     <a href="tel:+34965273031" class="card-link phone-card">
                         <span class="card-icon"><i class="fa-solid fa-phone"></i></span>
                         <div class="card-text">
@@ -68,7 +58,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -88,16 +77,12 @@
                 </div>
                 <div class="footer-col">
                     <h4>HORARIO</h4>
-                    <p>Lunes a Sábado: 08:30 - 21:30</p>
+                    <p>Lunes a Sábado: 08:30 - 22:30</p>
                     <p>Domingos: 08:30 - 16:30</p>
-                </div>
-                <div class="footer-col">
-                    <h4>SÍGUENOS</h4>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
-                        <a href="#" target="_blank" rel="noopener noreferrer">TikTok</a>
-                    </div>
-                </div>
+                    <br>
+                    <h4>HORARIO VERANO</h4>
+                    <p>Lunes a Domingo: 08:30 - 22:30</p>
+                </div>               
             </div>
         </div>
         <div class="footer-bottom">
@@ -105,12 +90,15 @@
         </div>
     </footer>
 
-    <div id="pdfModal" class="modal-pdf">
+    <div id="pdfModalCarta" class="modal-pdf">
         <div class="modal-header">
-            <span class="close-modal" id="closeCarta">&times; Cerrar Carta</span>
+            <button class="close-modal" id="closeCarta">
+                <span class="close-icon">×</span>
+                <span class="close-text">Cerrar</span>
+            </button>
         </div>
-        <div class="modal-body-images">
-           <img src="images/carta/carta_pag1.jpg" alt="Carta Página 1" class="carta-img">
+        <div class="modal-wrapper-dinamico">
+            <img src="images/carta/carta_pag1.jpg" alt="Carta Página 1" class="carta-img">
             <img src="images/carta/carta_pag2.jpg" alt="Carta Página 2" class="carta-img">
             <img src="images/carta/carta_pag3.jpg" alt="Carta Página 3" class="carta-img">
             <img src="images/carta/carta_pag4.jpg" alt="Carta Página 4" class="carta-img">
@@ -121,7 +109,29 @@
             <img src="images/carta/carta_pag9.jpg" alt="Carta Página 9" class="carta-img">
             <img src="images/carta/carta_pag10.jpg" alt="Carta Página 10" class="carta-img">
             <img src="images/carta/carta_pag11.jpg" alt="Carta Página 11" class="carta-img">
+            </div>
+    </div>
+
+   <div id="pdfModalBebidas" class="modal-pdf">
+        <div class="modal-header">
+            <button class="close-modal" id="closeBebidas">
+                <span class="close-icon">×</span>
+                <span class="close-text">Cerrar</span>
+            </button>
         </div>
+        <div class="modal-wrapper-dinamico">
+            <img src="images/carta/carta_pag1.jpg" alt="Bebidas Página 1" class="carta-img">
+            <img src="images/carta/carta_pag2.jpg" alt="Bebidas Página 2" class="carta-img">
+            <img src="images/carta/carta_pag3.jpg" alt="Bebidas Página 3" class="carta-img">
+            <img src="images/carta/carta_pag4.jpg" alt="Bebidas Página 4" class="carta-img">
+            <img src="images/carta/carta_pag5.jpg" alt="Bebidas Página 5" class="carta-img">
+            <img src="images/carta/carta_pag6.jpg" alt="Bebidas Página 6" class="carta-img">
+            <img src="images/carta/carta_pag7.jpg" alt="Bebidas Página 7" class="carta-img">
+            <img src="images/carta/carta_pag8.jpg" alt="Bebidas Página 8" class="carta-img">
+            <img src="images/carta/carta_pag9.jpg" alt="Bebidas Página 9" class="carta-img">
+            <img src="images/carta/carta_pag10.jpg" alt="Bebidas Página 10" class="carta-img">
+            <img src="images/carta/carta_pag11.jpg" alt="Bebidas Página 11" class="carta-img">
+            </div>
     </div>
 
     <script src="script.js"></script>

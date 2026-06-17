@@ -1,22 +1,16 @@
-/**
- * FOQUE - Script Universal Final
- */
-
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. MENÚ HAMBURGUESA (Cierre automático tras clic) ---
+    // --- 1. MENÚ HAMBURGUESA ---
     const mobileMenu = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
 
     if (mobileMenu && navMenu) {
-        // Abrir y cerrar con el botón
         mobileMenu.addEventListener('click', (e) => {
             e.stopPropagation();
             navMenu.classList.toggle('mobile-active');
             mobileMenu.classList.toggle('is-active');
         });
 
-        // CERRAR AUTOMÁTICAMENTE AL DARLE A UN BOTÓN/ENLACE
         const navLinks = navMenu.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -25,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Cerrar al pulsar fuera
         document.addEventListener('click', (e) => {
             if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target)) {
                 navMenu.classList.remove('mobile-active');
@@ -67,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', updateTabVisibility);
     }
 
-    // --- 3. CARRUSEL DE RESEÑAS (Carga instantánea) ---
+    // --- 3. CARRUSEL DE RESEÑAS ---
     const reviewItems = document.querySelectorAll('.review-item');
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
@@ -90,93 +83,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 6000);
     }
 
-    // --- 4. MODAL DE LA CARTA ---
-    const pdfModal = document.getElementById('pdfModal');
+    // --- 4. CONTROL DE MODALES INDEPENDIENTES (Carta y Bebidas) ---
+    const modalCarta = document.getElementById('pdfModalCarta');
+    const modalBebidas = document.getElementById('pdfModalBebidas');
+    
     const closeCarta = document.getElementById('closeCarta');
-    const triggers = [document.getElementById('openCartaNav'), document.getElementById('openCartaPanel')];
+    const closeBebidas = document.getElementById('closeBebidas');
 
-    const abrirCarta = (e) => {
-        if (e) e.preventDefault();
-        if (pdfModal) {
-            pdfModal.classList.add('active');
-            document.body.classList.add('modal-open');
-            if (slidingPanel) slidingPanel.classList.remove('active');
-            if (toggleTab) { 
-                toggleTab.classList.remove('active');
-                toggleTab.style.opacity = "0"; 
-                toggleTab.style.pointerEvents = "none"; 
-            }
+    const triggersCarta = [document.getElementById('openCartaNav'), document.getElementById('openCartaPanel')];
+    const triggersBebidas = [document.getElementById('openBebidasNav'), document.getElementById('openBebidasPanel')];
+
+    const abrirModal = (modal) => {
+        if (!modal) return;
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+        if (slidingPanel) slidingPanel.classList.remove('active');
+        if (toggleTab) { 
+            toggleTab.classList.remove('active');
+            toggleTab.style.opacity = "0"; 
+            toggleTab.style.pointerEvents = "none"; 
         }
     };
 
-    const cerrarCarta = () => {
-        if (pdfModal) {
-            pdfModal.classList.remove('active');
-            document.body.classList.remove('modal-open');
-            updateTabVisibility(); 
-        }
+    const cerrarModales = () => {
+        if (modalCarta) modalCarta.classList.remove('active');
+        if (modalBebidas) modalBebidas.classList.remove('active');
+        document.body.classList.remove('modal-open');
+        updateTabVisibility();
     };
 
-    triggers.forEach(t => t && t.addEventListener('pointerdown', abrirCarta));
-    if (closeCarta) closeCarta.addEventListener('pointerdown', cerrarCarta);
+    triggersCarta.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
+    triggersBebidas.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
 
-    // --- 5. CARRUSEL HISTORIA ---
-    const historyImages = document.querySelectorAll('.history-img');
-    let historyIndex = 0;
-    if (historyImages.length > 0) {
-        setInterval(() => {
-            historyImages[historyIndex].classList.remove('active');
-            historyIndex = (historyIndex + 1) % historyImages.length;
-            historyImages[historyIndex].classList.add('active');
-        }, 4000);
-    }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    const imageColumns = document.querySelectorAll('.nosotros-image-col');
-
-    imageColumns.forEach(col => {
-        // Saltamos bloqueos de ratón globales
-        col.style.pointerEvents = "auto";
-        const imgInside = col.querySelector('.zoom-image');
-        if(imgInside) imgInside.style.pointerEvents = "none"; 
-
-        // 1. Ampliar imagen al hacer click
-        col.addEventListener('click', function(e) {
-            if(this.classList.contains('fullscreen-mode')) return;
-
-            const parentRow = this.closest('.nosotros-row');
-            parentRow.classList.add('has-fullscreen');
-            this.classList.add('fullscreen-mode');
-        });
-    });
-
-    // Función global para cerrar cualquier imagen expandida
-    const resetFullscreenImage = () => {
-        const activeFullscreen = document.querySelector('.nosotros-image-col.fullscreen-mode');
-        if (activeFullscreen) {
-            const parentRow = activeFullscreen.closest('.nosotros-row');
-            parentRow.classList.remove('has-fullscreen');
-            activeFullscreen.classList.remove('fullscreen-mode');
-        }
-    };
-
-    // 2. DETECTOR DE SCROLL MOUSE: Cualquier movimiento de rueda cierra el modo pantalla completa
-    window.addEventListener('wheel', () => {
-        resetFullscreenImage();
-    }, { passive: true });
-
-    // 3. DETECTOR DE SCROLL TÁCTIL (Móviles/Trackpads): Al deslizar el dedo en cualquier dirección, se cierra
-    let touchStartY = 0;
-    window.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-        let touchEndY = e.touches[0].clientY;
-        // Si el movimiento vertical supera los 20px (arriba o abajo), cerramos la imagen
-        if (Math.abs(touchStartY - touchEndY) > 20) { 
-            resetFullscreenImage();
-        }
-    }, { passive: true });
+    if (closeCarta) closeCarta.addEventListener('pointerdown', cerrarModales);
+    if (closeBebidas) closeBebidas.addEventListener('pointerdown', cerrarModales);
 });

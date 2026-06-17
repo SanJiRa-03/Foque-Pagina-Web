@@ -5,33 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foque | Comida China Y Española</title>        
-    <link rel="icon" type="image/png" href="images/Icono_SinFondo.png">
+    <link rel="icon" type="image/png" href="images/Logo_Beige_SinNombre.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://db.onlinewebfonts.com/c/b592736c06bab787133131c6a6d8992d?family=LTCGoudyHeavyfaceOT" rel="stylesheet">
 </head>
 <body oncontextmenu="return false;">
     <div class="fixed-bg-canvas"></div>
-        <header class="header">
-            <a href="index.html" class="logo">Foque</a>
-            
-            <!-- Este bloque debe estar en TODAS las páginas -->
-            <div class="menu-toggle" id="mobile-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+    <header class="header">
+        <a href="index.html" class="logo">Foque</a>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
-            <nav class="navbar" id="nav-menu">
-                <a href="index.html">Inicio</a>
-                <a href="#carta" id="openCartaNav">Carta</a>
-                <a href="nosotros.html">Sobre Nosotros</a>
-                <a href="contacto.html">Contacto</a>
-            </nav>
-         </header>
+        <nav class="navbar" id="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="#carta" id="openCartaNav">Carta</a>
+            <a href="#bebidas" id="openBebidasNav">Bebidas</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </header>
 
     <main class="hero">
-        <section class="hero">
-             <img src="images/Logo_Blanco.png" alt="Foque Logo" class="main-title">
+        <section class="hero-section">
+             <img src="images/Logo_Beige_SinNombre.png" alt="Foque Logo" class="main-title-logo">
         </section>
     
         <div class="tab-trigger" id="toggleTab">
@@ -40,50 +39,52 @@
     </main>
 
     <section class="reviews-section">
-        <div class="carousel-viewport">
-            <div class="carousel-track" id="carouselTrack">
-                <div class="review-item">
-                    <div class="review-stars">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        <div class="carousel-container">
+            <button class="nav-btn prev" id="prevBtn">‹</button>
+            <div class="carousel-viewport">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="review-item">
+                        <div class="review-stars">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="review-text">Me encanta el servicio y la limpieza, los camareros son muy amables y te atienden genial y la comida está exquisita 10/10</p>
+                        <span class="review-author">B. — GOOGLE REVIEWS</span>
                     </div>
-                    <p class="review-text">Me encanta el servicio y la limpieza, los camareros son muy amables y te atienden genial y la comida está exquisita 10/10</p>
-                    <span class="review-author">B. — GOOGLE REVIEWS</span>
-                </div>
-                <div class="review-item">
-                    <div class="review-stars">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    <div class="review-item">
+                        <div class="review-stars">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="review-text">Buen sitio para ir con niños, pues hay un parque a cada lado con columpios. La familia que lo lleva es muy agradable. Vamos a desayunar casi cada día.</p>
+                        <span class="review-author">C. — GOOGLE REVIEWS</span>
                     </div>
-                    <p class="review-text">Buen sitio para ir con niños, pues hay un parque a cada lado con columpios. La familia que lo lleva es muy agradable. Vamos a desayunar casi cada día.</p>
-                    <span class="review-author">C. — GOOGLE REVIEWS</span>
-                </div>
-                <div class="review-item">
-                    <div class="review-stars">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    <div class="review-item">
+                        <div class="review-stars">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="review-text">Un sitio genial, sencillo pero con buenos precios, buen tamaño de las raciones y todo muy rico!</p>
+                        <span class="review-author">E. — GOOGLE REVIEWS</span>
                     </div>
-                    <p class="review-text">Un sitio genial, sencillo pero con buenos precios, buen tamaño de las raciones y todo muy rico!</p>
-                    <span class="review-author">E. — GOOGLE REVIEWS</span>
                 </div>
             </div>
+            <button class="nav-btn next" id="nextBtn">›</button>
         </div>
-
-        <button class="nav-btn prev" id="prevBtn">‹</button>
-        <button class="nav-btn next" id="nextBtn">›</button>
     </section>
 
-    <!-- Busca la sección del sliding-panel y déjala así: -->
     <section class="sliding-panel" id="slidingPanel">
         <div class="panel-content">
-            <!-- Añadimos clases específicas para las animaciones opuestas -->
-            <button class="btn btn-menu">MENÚ</button>
-            <button class="btn btn-carta" id="openCartaPanel">CARTA</button>
+            <button class="btn btn-menu" id="openCartaPanel">CARTA</button>
+            <button class="btn btn-carta" id="openBebidasPanel">BEBIDAS</button>
         </div>
     </section>
 
-    <div id="pdfModal" class="modal-pdf">
+    <div id="pdfModalCarta" class="modal-pdf">
         <div class="modal-header">
-            <span class="close-modal" id="closeCarta">&times; Cerrar Carta</span>
+            <button class="close-modal" id="closeCarta">
+                <span class="close-icon">×</span>
+                <span class="close-text">Cerrar</span>
+            </button>
         </div>
-        <div class="modal-body-images">
+        <div class="modal-wrapper-dinamico">
             <img src="images/carta/carta_pag1.jpg" alt="Carta Página 1" class="carta-img">
             <img src="images/carta/carta_pag2.jpg" alt="Carta Página 2" class="carta-img">
             <img src="images/carta/carta_pag3.jpg" alt="Carta Página 3" class="carta-img">
@@ -95,7 +96,29 @@
             <img src="images/carta/carta_pag9.jpg" alt="Carta Página 9" class="carta-img">
             <img src="images/carta/carta_pag10.jpg" alt="Carta Página 10" class="carta-img">
             <img src="images/carta/carta_pag11.jpg" alt="Carta Página 11" class="carta-img">
+            </div>
+    </div>
+
+   <div id="pdfModalBebidas" class="modal-pdf">
+        <div class="modal-header">
+            <button class="close-modal" id="closeBebidas">
+                <span class="close-icon">×</span>
+                <span class="close-text">Cerrar</span>
+            </button>
         </div>
+        <div class="modal-wrapper-dinamico">
+            <img src="images/carta/carta_pag1.jpg" alt="Bebidas Página 1" class="carta-img">
+            <img src="images/carta/carta_pag2.jpg" alt="Bebidas Página 2" class="carta-img">
+            <img src="images/carta/carta_pag3.jpg" alt="Bebidas Página 3" class="carta-img">
+            <img src="images/carta/carta_pag4.jpg" alt="Bebidas Página 4" class="carta-img">
+            <img src="images/carta/carta_pag5.jpg" alt="Bebidas Página 5" class="carta-img">
+            <img src="images/carta/carta_pag6.jpg" alt="Bebidas Página 6" class="carta-img">
+            <img src="images/carta/carta_pag7.jpg" alt="Bebidas Página 7" class="carta-img">
+            <img src="images/carta/carta_pag8.jpg" alt="Bebidas Página 8" class="carta-img">
+            <img src="images/carta/carta_pag9.jpg" alt="Bebidas Página 9" class="carta-img">
+            <img src="images/carta/carta_pag10.jpg" alt="Bebidas Página 10" class="carta-img">
+            <img src="images/carta/carta_pag11.jpg" alt="Bebidas Página 11" class="carta-img">
+            </div>
     </div>
 
     <footer class="footer">
@@ -118,16 +141,11 @@
                     <h4>HORARIO</h4>
                     <p>Lunes a Sábado: 08:30 - 22:30</p>
                     <p>Domingos: 08:30 - 16:30</p>
-                </div>
-
-                <div class="footer-col">
-                    <h4>SÍGUENOS</h4>
-                        <div class="social-links">
-                            <a href="https://www.instagram.com/?hl=es" target="_blank" rel="noopener noreferrer">Instagram</a>
-                            <a href="#" target="_blank" rel="noopener noreferrer">TikTok</a>
-                        </div>
-                    </div>
-                </div>
+                    <br>
+                    <h4>HORARIO VERANO</h4>
+                    <p>Lunes a Domingo: 08:30 - 22:30</p>
+                </div>                
+            </div>
         </div>
         <div class="footer-bottom">
             &copy; 2026 FOQUE. Todos los derechos reservados.
