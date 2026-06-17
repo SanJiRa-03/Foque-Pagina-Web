@@ -97,6 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!modal) return;
         modal.classList.add('active');
         document.body.classList.add('modal-open');
+
+        // FIX iOS: fuerza que el modal arranque siempre mostrando la
+        // página 1 arriba del todo, sin importar el scroll previo de la
+        // página o de una apertura anterior del modal. Sin esto, en
+        // iPhone la carta podía aparecer "desplazada" a mitad de las
+        // imágenes en vez de empezar por la primera página.
+        const scrollArea = modal.querySelector('.modal-scroll-area');
+        if (scrollArea) {
+            scrollArea.scrollTop = 0;
+        }
+
         if (slidingPanel) slidingPanel.classList.remove('active');
         if (toggleTab) { 
             toggleTab.classList.remove('active');
