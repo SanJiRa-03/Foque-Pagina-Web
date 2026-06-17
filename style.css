@@ -1215,3 +1215,25 @@ body:has(.modal-pdf.active) .header {
         font-size: 0.85rem;
     }
 }
+
+/* --- FIX DEFINITIVO DE ZONAS DE TOQUE EN MÓVIL --- */
+
+/* 1. Aseguramos que la pestaña tenga un área de click limpia y prioritaria */
+#toggleTab {
+    cursor: pointer;
+    z-index: 100010 !important; /* Supercapa */
+}
+
+/* 2. Empujamos los botones de la carta y las bebidas hacia abajo dentro del panel */
+/* Esto hace que cuando el panel esté cerrado, los botones queden físicamente más abajo */
+/* y el dedo nunca pueda llegar a tocarlos por error al pulsar la flecha */
+#slidingPanel {
+    padding-top: 30px !important; /* <--- Crea un "colchón" de espacio vacío arriba */
+}
+
+/* 3. Evitamos que los botones se peguen al borde superior del panel */
+#slidingPanel .btn-carta, 
+#slidingPanel .btn-menu,
+#slidingPanel .open-panel-btn {
+    margin-top: 10px !important;
+}
