@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleTab.style.pointerEvents = "auto";
         }
     };
+    let ultimoToggleFlecha = 0;
 
     if (toggleTab && slidingPanel) {
         toggleTab.addEventListener('click', (e) => {
@@ -67,25 +68,24 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             
             isInteracting = true;
+            ultimoToggleFlecha = Date.now(); // <-- guardamos el momento del toque
             slidingPanel.classList.toggle('active');
             toggleTab.classList.toggle('active');
             
-            // BLINDAJE: Desactivamos temporalmente los clicks en el menú hamburguesa
             const mobileMenuBtn = document.getElementById('mobile-menu');
             if (mobileMenuBtn) {
                 mobileMenuBtn.style.pointerEvents = 'none';
                 
-                // Volvemos a activar el menú cuando el panel haya terminado de moverse (400ms)
                 setTimeout(() => {
                     mobileMenuBtn.style.pointerEvents = 'auto';
                     isInteracting = false;
-                }, 400);
+                }, 650); // <-- antes 400, ahora cubre toda la transición de 0.6s + margen
             } else {
-                setTimeout(() => { isInteracting = false; }, 400);
+                setTimeout(() => { isInteracting = false; }, 650);
             }
         });
         window.addEventListener('scroll', updateTabVisibility);
-    }
+}
 
     // --- 3. CARRUSEL DE RESEÑAS ---
     const reviewItems = document.querySelectorAll('.review-item');
@@ -120,15 +120,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const triggersCarta = [document.getElementById('openCartaNav'), document.getElementById('openCartaPanel')];
     const triggersBebidas = [document.getElementById('openBebidasNav'), document.getElementById('openBebidasPanel')];
 
-    const abrirModal = (modal, evento) => {
-        if (!modal) return;
+const abrirModal = (modal, evento) => {
+    if (!modal) return;
 
-        // NUEVO: Si el click proviene de la flecha o si el panel se está moviendo, abortamos la apertura de la carta
-        if (evento && (evento.target.closest('#toggleTab') || isInteracting)) {
-            return;
-        }
+    // Bloqueamos si el click viene de la flecha, si el panel se está moviendo,
+    // o si ha pasado muy poco tiempo desde que se tocó la flecha (cubre los
+    // "clicks fantasma" de iOS que llegan tarde y aterrizan sobre los botones)
+    if (evento && (evento.target.closest('#toggleTab') || isInteracting || (Date.now() - ultimoToggleFlecha < 700))) {
+        return;
+    }
 
-        modal.classList.add('active');
+    modal.classList.add('active');
         document.body.classList.add('modal-open');
 
         const scrollArea = modal.querySelector('.modal-scroll-area');
