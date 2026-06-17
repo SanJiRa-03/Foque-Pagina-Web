@@ -62,16 +62,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (toggleTab && slidingPanel) {
-        // Cambiado de 'pointerdown' a 'click' y añadido stopPropagation
         toggleTab.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Evita que el click se propague a elementos de fondo
+            e.stopPropagation();
             
             isInteracting = true;
             slidingPanel.classList.toggle('active');
             toggleTab.classList.toggle('active');
             
-            setTimeout(() => { isInteracting = false; }, 400);
+            // BLINDAJE: Desactivamos temporalmente los clicks en el menú hamburguesa
+            const mobileMenuBtn = document.getElementById('mobile-menu');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.style.pointerEvents = 'none';
+                
+                // Volvemos a activar el menú cuando el panel haya terminado de moverse (400ms)
+                setTimeout(() => {
+                    mobileMenuBtn.style.pointerEvents = 'auto';
+                    isInteracting = false;
+                }, 400);
+            } else {
+                setTimeout(() => { isInteracting = false; }, 400);
+            }
         });
         window.addEventListener('scroll', updateTabVisibility);
     }
