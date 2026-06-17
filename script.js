@@ -126,20 +126,40 @@ document.addEventListener('DOMContentLoaded', () => {
     triggersCarta.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
     triggersBebidas.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
 
-    // FIX iOS: cerrar con 'click' en vez de 'pointerdown'. El cierre ya no
-    // es time-sensitive (no hay animación que sincronizar como en la
-    // pestaña), así que usamos el evento que el navegador dispara solo
-    // tras completar un toque limpio (touchstart+touchend en el mismo
-    // punto). Esto evita que, al levantar el dedo, el resto del gesto
-    // "se filtre" hacia la imagen de la carta que queda debajo y la
-    // seleccione o haga long-press sobre ella.
-    // stopPropagation() además evita que el click llegue a cualquier
-    // listener puesto en el documento/imagen subyacente.
+    // FIX iOS: el cierre se gestiona con 'touchstart' en dispositivos
+    // táctiles (ver bloque de abajo) y con 'click' como fallback para
+    // ratón/trackpad en escritorio. Usamos una bandera para que, si
+    // 'touchstart' ya cerró el modal, el 'click' que el navegador dispara
+    // después no vuelva a ejecutar nada extra.
+    let cerradoPorToque = false;
+
     const cerrarConClick = (e) => {
+        if (cerradoPorToque) { cerradoPorToque = false; return; }
         e.preventDefault();
         e.stopPropagation();
         cerrarModales();
     };
     if (closeCarta) closeCarta.addEventListener('click', cerrarConClick);
     if (closeBebidas) closeBebidas.addEventListener('click', cerrarConClick);
+
+    // FIX iOS (causa raíz del problema reportado): el long-press / selección
+    // de texto que aparece "debajo" del aspa se debe a que iOS, al levantar
+    // el dedo, hace el hit-test final sobre la capa de scroll subyacente en
+    // vez de sobre el botón sticky. Al actuar ya en 'touchstart' —antes de
+    // que exista margen para que iOS interprete el gesto como selección— y
+    // cancelar el evento con preventDefault(), eliminamos esa ventana.
+    // selectstart/contextmenu quedan como red de seguridad adicional.
+    [modalCarta, modalBebidas].forEach(modal => {
+        if (!modal) return;
+        modal.addEventListener('selectstart', (e) => e.preventDefault());
+        modal.addEventListener('contextmenu', (e) => e.preventDefault());
+        const closeBtn = modal.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                cerradoPorToque = true;
+                cerrarModales();
+            }, { passive: false });
+        }
+    });
 });

@@ -744,6 +744,15 @@ body.modal-open {
     z-index: 999999 !important; /* Por encima de cualquier header para evitar clics fantasma */
     overflow: hidden !important; /* FIX: ya no hace scroll aquí, ver .modal-scroll-area */
     box-sizing: border-box !important;
+    /* FIX iOS: bloquea selección de texto y el menú de "Copiar/Buscar" por
+       long-press en TODO el árbol del modal (no solo en el botón). El
+       problema persistía porque iOS puede activar la selección sobre el
+       CONTENEDOR con scroll (.modal-scroll-area) aunque la imagen en sí
+       tenga pointer-events:none; el long-press se calcula sobre la capa
+       que recibe el toque, no solo sobre el elemento visual final. */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 .modal-pdf.active {
@@ -764,6 +773,11 @@ body.modal-open {
     align-items: center !important;
     padding: 20px 20px 40px !important;
     box-sizing: border-box !important;
+    /* FIX iOS: refuerzo explícito, ya que ser el elemento con overflow
+       real es justo donde iOS evalúa el long-press para seleccionar. */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 /* Mientras la carta/bebidas está abierta, el header (y por tanto el menú
@@ -784,6 +798,11 @@ body:has(.modal-pdf.active) .header {
     flex-direction: column !important;
     gap: 25px !important; 
     z-index: 1000000 !important;
+    /* FIX iOS: último nivel de blindaje, justo donde viven las imágenes
+       de la carta (lo que el usuario realmente toca al hacer scroll). */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
 
 /* FIX: el sticky ahora vive dentro de .modal-scroll-area (que sí tiene
