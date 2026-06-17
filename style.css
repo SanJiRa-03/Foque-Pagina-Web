@@ -721,7 +721,14 @@ body.modal-open {
 
 /* --- MODAL DE LA CARTA --- */
 /* ==========================================================================
-   --- ESTILOS BASE DEL MODAL (MODIFICADO SECCIÓN FIXED) ---
+   --- ESTILOS BASE DEL MODAL (FIX iOS: scroll fiable + sticky estable) ---
+   El bug en iPhone (carta desplazada / botón "Cerrar" cayendo al fondo)
+   venía de combinar position:fixed + overflow-y:scroll en el mismo
+   elemento: en Safari iOS eso rompe el cálculo del position:sticky cada
+   vez que la barra de direcciones se contrae/expande durante el scroll.
+   Solución: el .modal-pdf ahora SOLO es el overlay de fondo (sin scroll
+   propio), y quien hace scroll de verdad es .modal-scroll-area, un
+   elemento normal (no fixed) donde el sticky sí funciona de forma fiable.
    ========================================================================== */
 .modal-pdf {
     display: none; 
@@ -734,13 +741,8 @@ body.modal-open {
     background-color: rgba(11, 11, 11, 0.88) !important;
     backdrop-filter: blur(10px) !important;       
     -webkit-backdrop-filter: blur(10px) !important; 
-    z-index: 999999 !important; /* CORREGIDO: Por encima de cualquier header para evitar clics fantasma */
-    flex-direction: column !important; /* CORREGIDO: el header y la carta se apilan en columna (antes iban en fila por defecto) */
-    justify-content: center !important; 
-    align-items: center !important; /* CORREGIDO: centra la carta; el botón se alinea aparte con align-self */
-    overflow-y: scroll !important; /* CORREGIDO: Fuerza el comportamiento nativo de scroll de ventana */
-    -webkit-overflow-scrolling: touch !important; /* CORREGIDO: scroll inercial suave en iOS, evita que el header del modal se quede "atascado" durante el scroll */
-    padding: 20px 20px 40px !important; /* CORREGIDO: ya no necesita 140px arriba porque el botón ahora vive dentro del flujo (sticky), no flotando aparte */
+    z-index: 999999 !important; /* Por encima de cualquier header para evitar clics fantasma */
+    overflow: hidden !important; /* FIX: ya no hace scroll aquí, ver .modal-scroll-area */
     box-sizing: border-box !important;
 }
 
@@ -748,8 +750,26 @@ body.modal-open {
     display: flex !important;
 }
 
-/* CORREGIDO: mientras la carta/bebidas está abierta, el header (y por tanto el menú hamburguesa) deja de poder recibir clics.
-   Así, si el botón de cerrar coincide en pantalla con el icono del menú, el clic SOLO cierra el modal y nunca llega a abrir el menú. */
+/* FIX: nuevo contenedor responsable del scroll real. Al no ser fixed,
+   Safari lo trata como un bloque normal con scroll propio, así el
+   sticky del botón "Cerrar" se queda anclado arriba de forma fiable y
+   el JS puede resetear su scrollTop a 0 sin comportamientos raros. */
+.modal-scroll-area {
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important; /* scroll inercial suave en iOS */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 20px 20px 40px !important;
+    box-sizing: border-box !important;
+}
+
+/* Mientras la carta/bebidas está abierta, el header (y por tanto el menú
+   hamburguesa) deja de poder recibir clics. Así, si el botón de cerrar
+   coincide en pantalla con el icono del menú, el clic SOLO cierra el
+   modal y nunca llega a abrir el menú. */
 body:has(.modal-pdf.active) .header {
     pointer-events: none !important;
 }
@@ -766,25 +786,28 @@ body:has(.modal-pdf.active) .header {
     z-index: 1000000 !important;
 }
 
-/* CORREGIDO: antes era position:fixed. Un fixed DENTRO de un contenedor que tiene overflow-y:scroll (como .modal-pdf) es justo el patrón que provoca el bug de iOS donde el elemento "se despega" un instante durante el scroll inercial. Con sticky, el botón vive dentro del flujo normal y se ancla de forma nativa y fiable. */
+/* FIX: el sticky ahora vive dentro de .modal-scroll-area (que sí tiene
+   scroll real de tipo "normal flow"), en vez de dentro de un elemento
+   fixed. Por eso se queda anclado de forma estable arriba en
+   iPhone/Safari, en lugar de "caer" al fondo tras el primer scroll. */
 .modal-header {
     position: -webkit-sticky !important; /* compatibilidad Safari/iOS */
     position: sticky !important;
-    top: 20px !important;
+    top: 0 !important;
     align-self: flex-end !important; /* lo mantiene anclado a la derecha dentro de la columna */
-    margin-right: 20px !important; /* sustituye al antiguo "right: 40px" (20px del padding + 20px de margen) */
+    margin-right: 0 !important;
     margin-bottom: 20px !important; /* hueco antes de la primera imagen de la carta */
     left: auto !important;
     width: auto !important;
     height: auto !important;
-    z-index: 2000000 !important; /* CORREGIDO: z-index masivo para anular el menú hamburguesa inferior */
+    z-index: 2000000 !important; /* z-index masivo para anular el menú hamburguesa inferior */
     flex-shrink: 0 !important; /* que no se encoja al apilarse con la carta */
     padding: 0 !important;
 }
 
 /* Botón con menor protagonismo (texto y aspa discretos y legibles) */
 .close-modal {
-    background: rgba(28, 34, 66, 0.8) !important; /* CORREGIDO: Un punto más opaco para que no se transparente el menú de abajo */
+    background: rgba(28, 34, 66, 0.8) !important; /* Un punto más opaco para que no se transparente el menú de abajo */
     border: 1px solid rgba(255, 253, 237, 0.3) !important;
     outline: none !important;
     cursor: pointer !important;
@@ -839,10 +862,10 @@ body:has(.modal-pdf.active) .header {
 }
 
 /* Personalización sutil del scroll lateral del modal */
-.modal-body-images::-webkit-scrollbar {
+.modal-scroll-area::-webkit-scrollbar {
     width: 6px;
 }
-.modal-body-images::-webkit-scrollbar-thumb {
+.modal-scroll-area::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
 }
@@ -880,11 +903,6 @@ body:has(.modal-pdf.active) .header {
    2. TRANSFORMACIÓN EXCLUSIVA DEL BOTÓN PARA MÓVILES (max-width: 1100px)
    -------------------------------------------------------------------------- */
 @media (max-width: 1100px) {
-    /* CORREGIDO: ya no reimponemos position:fixed aquí (eso era lo que anulaba el sticky del bloque base y hacía que el botón se siguiera "despegando" en móvil). Solo acercamos un poco el botón al borde en pantallas pequeñas. */
-    .modal-header {
-        margin-right: 0 !important;
-    }
-
     /* Transformación al círculo azul marino premium */
     .close-modal {
         width: 46px !important;      
@@ -963,7 +981,7 @@ body:has(.modal-pdf.active) .header {
         padding-bottom: 90px; /* CORREGIDO: más margen en móvil para que la flecha nunca tape el logo */
     }
     .sliding-panel {
-        height: calc(100vh - 76px); /* CORREGIDO: usaba 90px (alto del header de escritorio); el header móvil mide 76px, eso dejaba un hueco visible debajo de los botones */
+        height: calc(100vh - 76px); /* CORREGIDO: el header móvil mide 76px, no 90px */
         height: calc(100dvh - 76px);
     }
     .header { 
@@ -1101,11 +1119,6 @@ body:has(.modal-pdf.active) .header {
     }
     .contacto-block {
         padding: 25px 15px;
-    }
-    
-    /* Pequeño ajuste de margen de seguridad en pantallas mini */
-    .modal-header {
-        margin-right: -5px !important; /* acerca el botón al borde derecho en pantallas muy estrechas */
     }
 }
 
