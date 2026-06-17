@@ -4,8 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu');
     const navMenu = document.getElementById('nav-menu');
 
+    // FIX iOS (red de seguridad adicional, ver bloque 4 más abajo para la
+    // causa raíz y el fix principal): si justo se acaba de cerrar un modal,
+    // ignoramos el siguiente click sobre el menú hamburguesa durante una
+    // ventana muy breve. Esto cubre navegadores donde `:has()` no esté
+    // soportado o se comporte de forma distinta a Safari/iOS.
+    let modalRecienCerrado = false;
+
     if (mobileMenu && navMenu) {
         mobileMenu.addEventListener('click', (e) => {
+            if (modalRecienCerrado) { return; }
             e.stopPropagation();
             navMenu.classList.toggle('mobile-active');
             mobileMenu.classList.toggle('is-active');
@@ -126,40 +134,44 @@ document.addEventListener('DOMContentLoaded', () => {
     triggersCarta.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalCarta); }));
     triggersBebidas.forEach(t => t && t.addEventListener('pointerdown', (e) => { e.preventDefault(); abrirModal(modalBebidas); }));
 
-    // FIX iOS: el cierre se gestiona con 'touchstart' en dispositivos
-    // táctiles (ver bloque de abajo) y con 'click' como fallback para
-    // ratón/trackpad en escritorio. Usamos una bandera para que, si
-    // 'touchstart' ya cerró el modal, el 'click' que el navegador dispara
-    // después no vuelva a ejecutar nada extra.
-    let cerradoPorToque = false;
-
+    // FIX iOS: el cierre se gestiona con 'click' (que en touch se dispara
+    // tras un toque limpio completo, en el mismo punto). Mantenemos el
+    // 'click' tanto para touch como para ratón/trackpad; no hace falta
+    // distinguir, ver explicación del bug real más abajo.
     const cerrarConClick = (e) => {
-        if (cerradoPorToque) { cerradoPorToque = false; return; }
         e.preventDefault();
         e.stopPropagation();
         cerrarModales();
+        // Ventana breve en la que ignoramos cualquier click sobre el menú
+        // hamburguesa, por si el mismo gesto táctil se interpretase también
+        // como toque sobre él en algún navegador.
+        modalRecienCerrado = true;
+        setTimeout(() => { modalRecienCerrado = false; }, 300);
     };
     if (closeCarta) closeCarta.addEventListener('click', cerrarConClick);
     if (closeBebidas) closeBebidas.addEventListener('click', cerrarConClick);
 
-    // FIX iOS (causa raíz del problema reportado): el long-press / selección
-    // de texto que aparece "debajo" del aspa se debe a que iOS, al levantar
-    // el dedo, hace el hit-test final sobre la capa de scroll subyacente en
-    // vez de sobre el botón sticky. Al actuar ya en 'touchstart' —antes de
-    // que exista margen para que iOS interprete el gesto como selección— y
-    // cancelar el evento con preventDefault(), eliminamos esa ventana.
-    // selectstart/contextmenu quedan como red de seguridad adicional.
+    // CAUSA REAL DEL BUG REPORTADO: al tocar el aspa, el menú hamburguesa
+    // se abría/cerraba como si también hubiera recibido el toque. No era
+    // selección de texto ni long-press: era un problema de timing con la
+    // regla CSS `body:has(.modal-pdf.active) .header { pointer-events:none }`.
+    //
+    // Esa regla depende de la clase 'active' del modal. Si cerrábamos el
+    // modal (quitando 'active') en 'touchstart' —es decir, ANTES de que el
+    // dedo se levante— el CSS se recalculaba al instante: el header volvía
+    // a ser clicable a mitad del mismo gesto táctil. Cuando el dedo se
+    // levantaba (touchend), el header YA estaba activo otra vez, y ese
+    // mismo levantamiento se interpretaba como un click sobre el menú
+    // hamburguesa que justo coincide en esa zona de la pantalla.
+    //
+    // Solución: cerrar el modal solo en 'click' (que el navegador dispara
+    // después de touchend, una vez completado el gesto), nunca antes. Así
+    // el header permanece bloqueado (pointer-events:none) durante TODO el
+    // gesto táctil, y al levantar el dedo ya no hay nada debajo que pueda
+    // reaccionar a ese mismo toque.
     [modalCarta, modalBebidas].forEach(modal => {
         if (!modal) return;
         modal.addEventListener('selectstart', (e) => e.preventDefault());
         modal.addEventListener('contextmenu', (e) => e.preventDefault());
-        const closeBtn = modal.querySelector('.close-modal');
-        if (closeBtn) {
-            closeBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                cerradoPorToque = true;
-                cerrarModales();
-            }, { passive: false });
-        }
     });
 });
