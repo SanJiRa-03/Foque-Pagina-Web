@@ -110,20 +110,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 6000);
     }
 
-    // --- 4. CONTROL DE MODALES INDEPENDIENTES (CORREGIDO APERTURA LIMPIA) ---
+   // --- 4. CONTROL DE MODALES INDEPENDIENTES (CON FILTRO ANTI-PERFORACIÓN) ---
     const modalCarta = document.getElementById('pdfModalCarta');
     const modalBebidas = document.getElementById('pdfModalBebidas');
     
     const closeCarta = document.getElementById('closeCarta');
     const closeBebidas = document.getElementById('closeBebidas');
 
-    // Separamos los disparadores del menú de arriba de los botones del panel inferior
-    const triggersNav = [document.getElementById('openCartaNav'), document.getElementById('openBebidasNav')];
-    const btnCartaPanel = document.getElementById('openCartaPanel');
-    const btnBebidasPanel = document.getElementById('openBebidasPanel');
+    const triggersCarta = [document.getElementById('openCartaNav'), document.getElementById('openCartaPanel')];
+    const triggersBebidas = [document.getElementById('openBebidasNav'), document.getElementById('openBebidasPanel')];
 
-    const abrirModal = (modal) => {
+    const abrirModal = (modal, evento) => {
         if (!modal) return;
+
+        // NUEVO: Si el click proviene de la flecha o si el panel se está moviendo, abortamos la apertura de la carta
+        if (evento && (evento.target.closest('#toggleTab') || isInteracting)) {
+            return;
+        }
+
         modal.classList.add('active');
         document.body.classList.add('modal-open');
 
@@ -147,28 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTabVisibility();
     };
 
-    // 1. Los enlaces del menú superior abren normal al hacer click
-    if(document.getElementById('openCartaNav')) document.getElementById('openCartaNav').addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalCarta); });
-    if(document.getElementById('openBebidasNav')) document.getElementById('openBebidasNav').addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalBebidas); });
+    // Pasamos el evento 'e' a la función abrirModal para poder analizarlo
+    triggersCarta.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalCarta, e); }));
+    triggersBebidas.forEach(t => t && t.addEventListener('click', (e) => { e.preventDefault(); abrirModal(modalBebidas, e); }));
 
-    // 2. Los botones gigantes del panel SOLO se abren con un CLICK limpio y consciente (nunca con roces o pointerdown)
-    if (btnCartaPanel) {
-        btnCartaPanel.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            abrirModal(modalCarta);
-        });
-    }
-
-    if (btnBebidasPanel) {
-        btnBebidasPanel.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            abrirModal(modalBebidas);
-        });
-    }
-
-    // Gestión del cierre de modales
     const cerrarConClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -176,15 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
         modalRecienCerrado = true;
         setTimeout(() => { modalRecienCerrado = false; }, 300);
     };
-    
     if (closeCarta) closeCarta.addEventListener('click', cerrarConClick);
     if (closeBebidas) closeBebidas.addEventListener('click', cerrarConClick);
 
-    if (modalCarta && modalBebidas) {
-        [modalCarta, modalBebidas].forEach(modal => {
-            if (!modal) return;
-            modal.addEventListener('selectstart', (e) => e.preventDefault());
-            modal.addEventListener('contextmenu', (e) => e.preventDefault());
-        });
-    }
+    [modalCarta, modalBebidas].forEach(modal => {
+        if (!modal) return;
+        modal.addEventListener('selectstart', (e) => e.preventDefault());
+        modal.addEventListener('contextmenu', (e) => e.preventDefault());
+    });
 });
