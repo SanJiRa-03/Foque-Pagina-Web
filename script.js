@@ -62,29 +62,36 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     let ultimoToggleFlecha = 0;
 
-    if (toggleTab && slidingPanel) {
-        toggleTab.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            isInteracting = true;
-            ultimoToggleFlecha = Date.now(); // <-- guardamos el momento del toque
-            slidingPanel.classList.toggle('active');
-            toggleTab.classList.toggle('active');
-            
-            const mobileMenuBtn = document.getElementById('mobile-menu');
-            if (mobileMenuBtn) {
-                mobileMenuBtn.style.pointerEvents = 'none';
-                
-                setTimeout(() => {
-                    mobileMenuBtn.style.pointerEvents = 'auto';
-                    isInteracting = false;
-                }, 650); // <-- antes 400, ahora cubre toda la transición de 0.6s + margen
-            } else {
-                setTimeout(() => { isInteracting = false; }, 650);
-            }
-        });
-        window.addEventListener('scroll', updateTabVisibility);
+   if (toggleTab && slidingPanel) {
+    toggleTab.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        isInteracting = true;
+        slidingPanel.classList.remove('panel-ready'); // bloqueamos los botones de inmediato
+        slidingPanel.classList.toggle('active');
+        toggleTab.classList.toggle('active');
+
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        if (mobileMenuBtn) mobileMenuBtn.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            if (mobileMenuBtn) mobileMenuBtn.style.pointerEvents = 'auto';
+            isInteracting = false;
+        }, 650);
+    });
+
+    // Solo "encendemos" los botones cuando el deslizamiento ha terminado de verdad
+    slidingPanel.addEventListener('transitionend', (e) => {
+        if (e.propertyName !== 'top') return;
+        if (slidingPanel.classList.contains('active')) {
+            slidingPanel.classList.add('panel-ready');
+        } else {
+            slidingPanel.classList.remove('panel-ready');
+        }
+    });
+
+    window.addEventListener('scroll', updateTabVisibility);
 }
 
     // --- 3. CARRUSEL DE RESEÑAS ---

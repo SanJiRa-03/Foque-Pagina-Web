@@ -1237,3 +1237,9 @@ body:has(.modal-pdf.active) .header {
 #slidingPanel .open-panel-btn {
     margin-top: 10px !important;
 }
+#slidingPanel .btn {
+    pointer-events: none;
+}
+#slidingPanel.panel-ready .btn {
+    pointer-events: auto;
+}
