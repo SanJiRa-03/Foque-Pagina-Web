@@ -164,7 +164,7 @@ body.modal-open {
     padding: 12px 60px;
     border-radius: 20px 20px 0 0;
     cursor: pointer;
-    z-index: 10001; 
+    z-index: 100006 !important;
     transition: bottom 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     display: flex;
     justify-content: center;
@@ -744,22 +744,21 @@ body.modal-open {
     left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    height: 100dvh !important; /* CORREGIDO: altura real visible en iOS */
-    background-color: rgba(11, 11, 11, 0.88) !important;
-    backdrop-filter: blur(10px) !important;       
-    -webkit-backdrop-filter: blur(10px) !important; 
-    z-index: 999999 !important; /* Por encima de cualquier header para evitar clics fantasma */
-    overflow: hidden !important; /* FIX: ya no hace scroll aquí, ver .modal-scroll-area */
+    height: 100dvh !important;
+    
+    /* OPTIMIZACIÓN: Quitamos el blur que ralentiza el scroll y usamos un fondo un poco más opaco */
+    background-color: rgba(11, 11, 11, 0.96) !important;
+    
+    z-index: 999999 !important; 
+    overflow: hidden !important; 
     box-sizing: border-box !important;
-    /* FIX iOS: bloquea selección de texto y el menú de "Copiar/Buscar" por
-       long-press en TODO el árbol del modal (no solo en el botón). El
-       problema persistía porque iOS puede activar la selección sobre el
-       CONTENEDOR con scroll (.modal-scroll-area) aunque la imagen en sí
-       tenga pointer-events:none; el long-press se calcula sobre la capa
-       que recibe el toque, no solo sobre el elemento visual final. */
     -webkit-user-select: none !important;
     user-select: none !important;
     -webkit-touch-callout: none !important;
+
+    /* Fuerza al móvil a usar la tarjeta gráfica (GPU) para suavizar el rendimiento */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .modal-pdf.active {
@@ -888,6 +887,11 @@ body:has(.modal-pdf.active) .header {
     display: block !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
     border-radius: 4px !important;
+    
+    /* OPTIMIZACIÓN DE RENDIMIENTO */
+    /*rendering-intent: relative-colorimetric;*/
+    image-rendering: -webkit-optimize-contrast;
+    will-change: transform; /* Avisa al navegador que se va a mover con scroll */
 }
 
 /* Limpieza absoluta de pseudo-elementos conflictivos anteriores */
@@ -1087,8 +1091,8 @@ body:has(.modal-pdf.active) .header {
     .next { right: -10px; }
     
     .sliding-panel.active { top: 76px !important; }
-    .tab-trigger.active { bottom: calc(100vh - 76px - 40px); }
-    .tab-trigger.active { bottom: calc(100dvh - 76px - 40px); } /* CORREGIDO: altura real visible en iOS */
+    .tab-trigger.active { bottom: calc(100vh - 76px - 40px); z-index: 100006 !important;}
+    .tab-trigger.active { bottom: calc(100dvh - 76px - 40px); z-index: 100006 !important;} /* CORREGIDO: altura real visible en iOS */
     
     .btn { font-size: 2.5rem; outline-width: 4px; outline-offset: -12px; }
     .btn:hover { padding-right: 0%; } 
@@ -1210,4 +1214,32 @@ body:has(.modal-pdf.active) .header {
     .tab-trigger .arrow {
         font-size: 0.85rem;
     }
+}
+
+/* --- FIX DEFINITIVO DE ZONAS DE TOQUE EN MÓVIL --- */
+
+/* 1. Aseguramos que la pestaña tenga un área de click limpia y prioritaria */
+#toggleTab {
+    cursor: pointer;
+    z-index: 100010 !important; /* Supercapa */
+}
+
+/* 2. Empujamos los botones de la carta y las bebidas hacia abajo dentro del panel */
+/* Esto hace que cuando el panel esté cerrado, los botones queden físicamente más abajo */
+/* y el dedo nunca pueda llegar a tocarlos por error al pulsar la flecha */
+#slidingPanel {
+    padding-top: 30px !important; /* <--- Crea un "colchón" de espacio vacío arriba */
+}
+
+/* 3. Evitamos que los botones se peguen al borde superior del panel */
+#slidingPanel .btn-carta, 
+#slidingPanel .btn-menu,
+#slidingPanel .open-panel-btn {
+    margin-top: 10px !important;
+}
+#slidingPanel .btn {
+    pointer-events: none;
+}
+#slidingPanel.panel-ready .btn {
+    pointer-events: auto;
 }
